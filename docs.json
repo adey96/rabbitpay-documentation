@@ -3,49 +3,61 @@
   "name": "RabbitPay Documentation",
   "theme": "mint",
   "colors": {
-    "primary": "#4F46E5"
+    "primary": "#FF5A1F"
   },
   "navigation": {
     "groups": [
       {
         "group": "Getting Started",
         "pages": [
-          "introduction",
-          "quick-start",
-          "installation"
+          "getting-started/introduction",
+          "getting-started/quick-start",
+          "getting-started/installation"
         ]
       },
       {
         "group": "Integrations",
         "pages": [
-          "shopify-integration",
-          "partial-payments",
-          "cod-management"
+          "integrations/shopify-integration",
+          "integrations/partial-payments",
+          "integrations/cod-management"
         ]
       },
       {
         "group": "API",
         "pages": [
-          "authentication",
-          "api-reference",
-          "webhooks"
+          "api/authentication",
+          "api/api-reference",
+          "api/webhooks"
         ]
       },
       {
         "group": "Product",
         "pages": [
-          "checkout-flow",
-          "order-management"
+          "product/checkout-flow",
+          "product/order-management"
         ]
       },
       {
         "group": "Support",
         "pages": [
-          "faqs",
-          "changelog",
-          "contact-us"
+          "support/faqs",
+          "support/changelog",
+          "support/contact-us"
         ]
       }
     ]
+  },
+  "navbar": {
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.rabbitpay.ai"
+    }
+  },
+  "footer": {
+    "socials": {
+      "website": "https://rabbitpay.ai"
+    }
   }
 }
