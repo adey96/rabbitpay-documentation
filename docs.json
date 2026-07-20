@@ -78,7 +78,7 @@
   "favicon": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-icon-black.svg?v=1784533881",
   "appearance": {
     "default": "light",
-    "strict": false
+    "strict": true
   },
   "background": {
     "decoration": "gradient"
