@@ -3,7 +3,9 @@
   "name": "RabbitPay Documentation",
   "theme": "mint",
   "colors": {
-    "primary": "#FF5A1F"
+    "primary": "#196bf5",
+    "light": "#4C8DF7",
+    "dark": "#0B4FC2"
   },
   "navigation": {
     "groups": [
@@ -53,11 +55,51 @@
       "type": "button",
       "label": "Dashboard",
       "href": "https://dashboard.rabbitpay.ai"
-    }
+    },
+    "links": [
+      {
+        "href": "mailto:support@rabbitpay.ai",
+        "label": "Support"
+      }
+    ]
   },
   "footer": {
     "socials": {
-      "website": "https://rabbitpay.ai"
+      "website": "https://rabbitpay.ai",
+      "x": "https://x.com/rabbitpay",
+      "linkedin": "https://linkedin.com/company/rabbitpay"
     }
+  },
+  "description": "Developer documentation for RabbitPay — the 1-Click Checkout platform for Shopify merchants.",
+  "logo": {
+    "light": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-logo.svg?v=1784533882",
+    "dark": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-white-logo-no-bg.svg?v=1784539339"
+  },
+  "favicon": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-icon-black.svg?v=1784533881",
+  "appearance": {
+    "default": "system"
+  },
+  "background": {
+    "decoration": "gradient"
+  },
+  "search": {
+    "prompt": "Search RabbitPay docs..."
+  },
+  "seo": {
+    "metatags": {
+      "og:title": "RabbitPay Documentation",
+      "og:description": "1-Click Checkout for Shopify. APIs, SDKs, webhooks, and integration guides.",
+      "og:site_name": "RabbitPay Docs"
+    },
+    "indexing": "navigable"
+  },
+  "contextual": {
+    "options": [
+      "copy",
+      "view",
+      "chatgpt",
+      "claude"
+    ],
+    "display": "header"
   }
 }
