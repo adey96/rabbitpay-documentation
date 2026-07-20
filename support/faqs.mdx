@@ -1,0 +1,85 @@
+---
+title: "FAQs"
+description: "Answers to the most common questions about RabbitPay."
+icon: "circle-question"
+---
+
+## General
+
+<AccordionGroup>
+  <Accordion title="What is RabbitPay?">
+    RabbitPay is a 1-Click Checkout platform built for Shopify merchants in India. It replaces the multi-step Shopify checkout with a single OTP-verified tap, supports partial payments and COD, and reduces RTO through built-in risk scoring.
+  </Accordion>
+
+  <Accordion title="How is RabbitPay different from Shopify's native checkout?">
+    Shopify's checkout is generic and multi-step. RabbitPay is India-first — UPI native, WhatsApp OTP, address auto-fill from phone, and COD/partial payment rules that Shopify doesn't ship out of the box.
+  </Accordion>
+
+  <Accordion title="Does RabbitPay work with Shopify Plus?">
+    Yes. RabbitPay is compatible with Basic, Shopify, Advanced, and Plus plans. Plus stores can additionally use Shopify Functions to hook into the flow.
+  </Accordion>
+</AccordionGroup>
+
+## Pricing & billing
+
+<AccordionGroup>
+  <Accordion title="How is RabbitPay priced?">
+    RabbitPay charges a flat fee per successful order plus payment processing. See [rabbitpay.ai/pricing](https://rabbitpay.ai/pricing) for the current tiers. There are no setup fees.
+  </Accordion>
+
+  <Accordion title="When do I get paid out?">
+    Prepaid orders are settled **T\+1** to your linked bank account. COD is settled after courier remittance, typically **T\+7 to T\+10**.
+  </Accordion>
+
+  <Accordion title="Do you charge for failed orders?">
+    No. You only pay for successful transactions.
+  </Accordion>
+</AccordionGroup>
+
+## Technical
+
+<AccordionGroup>
+  <Accordion title="Can I use RabbitPay with a headless storefront?">
+    Yes. Use the [JavaScript SDK](/api/sdks) with the REST API. RabbitPay does not require Shopify's storefront — only its Admin API for order creation.
+  </Accordion>
+
+  <Accordion title="How do I test without processing real payments?">
+    Use `sk_test_...` keys. Test cards, test UPI IDs, and OTP `123456` are documented in the [Quick Start](/getting-started/quick-start).
+  </Accordion>
+
+  <Accordion title="How long are webhook signing secrets valid?">
+    Indefinitely, until you rotate them. Rotate immediately if you suspect exposure.
+  </Accordion>
+
+  <Accordion title="Does RabbitPay store card details?">
+    RabbitPay is PCI DSS Level 1 compliant. Cards are tokenized via our acquiring partners — raw PAN never touches your servers or ours.
+  </Accordion>
+</AccordionGroup>
+
+## COD & partial payments
+
+<AccordionGroup>
+  <Accordion title="Can I disable COD for specific pincodes?">
+    Yes. Create a [COD rule](/integrations/cod-management) with a pincode condition and action `disable_cod`.
+  </Accordion>
+
+  <Accordion title="What happens if the shopper refuses delivery on a partial order?">
+    The prepaid amount is automatically refunded to the shopper's source once the courier marks the shipment RTO. The COD balance is never captured.
+  </Accordion>
+
+  <Accordion title="Can I offer partial payments only for high-value carts?">
+    Yes — use `conditions.cart_value_min` when creating the partial payment rule.
+  </Accordion>
+</AccordionGroup>
+
+## Support
+
+<AccordionGroup>
+  <Accordion title="How do I contact support?">
+    Email [support@rabbitpay.ai](mailto:support@rabbitpay.ai) or open a ticket from the Dashboard. Enterprise plans include a dedicated Slack channel.
+  </Accordion>
+
+  <Accordion title="Where do I report a security issue?">
+    Please email [security@rabbitpay.ai](mailto:security@rabbitpay.ai). We run a responsible disclosure program with rewards up to ₹5,00,000.
+  </Accordion>
+</AccordionGroup>

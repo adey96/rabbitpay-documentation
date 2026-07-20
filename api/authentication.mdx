@@ -1,0 +1,103 @@
+---
+title: "Authentication"
+description: "How to authenticate requests to the RabbitPay REST API."
+icon: "key"
+---
+
+The RabbitPay API uses **API keys** to authenticate every request. Keys are created in the [Dashboard](https://dashboard.rabbitpay.ai) and scoped per environment (test / live).
+
+## Base URL
+
+```text
+https://api.rabbitpay.ai/v1
+```
+
+All requests must be made over HTTPS. Plain HTTP requests are refused.
+
+## Bearer token
+
+Pass your **secret key** as a Bearer token in the `Authorization` header:
+
+```bash
+curl https://api.rabbitpay.ai/v1/checkout/sessions \
+  -H "Authorization: Bearer sk_live_your_key"
+```
+
+## Key types
+
+| Type | Prefix | Where to use |
+| --- | --- | --- |
+| Publishable | `pk_test_...` / `pk_live_...` | Browser-side (`js.rabbitpay.ai`) |
+| Secret | `sk_test_...` / `sk_live_...` | Server-side only |
+| Restricted | `rk_live_...` | Scoped keys for specific endpoints |
+
+<Warning>
+  Rotate any key that is committed to source control immediately from the Dashboard → **Developers → API Keys → Roll**.
+</Warning>
+
+## Restricted keys
+
+Restricted keys let you scope access to specific resources (e.g. read-only access to orders). Create them from Dashboard → **Developers → Restricted keys**.
+
+```json
+{
+  "name": "Analytics warehouse",
+  "scopes": [
+    "orders:read",
+    "checkout_sessions:read",
+    "refunds:read"
+  ]
+}
+```
+
+## Idempotency
+
+All mutating requests (`POST`, `PATCH`, `DELETE`) accept an `Idempotency-Key` header. Sending the same key within 24 hours returns the original response instead of creating a duplicate resource.
+
+```bash
+curl https://api.rabbitpay.ai/v1/refunds \
+  -H "Authorization: Bearer sk_live_your_key" \
+  -H "Idempotency-Key: refund-order-8471" \
+  -d '{ "order_id": "ord_01H8Z...", "amount": 100000 }'
+```
+
+## Errors
+
+RabbitPay returns standard HTTP status codes plus a JSON error body:
+
+```json
+{
+  "error": {
+    "type": "invalid_request_error",
+    "code": "missing_field",
+    "message": "customer.phone is required",
+    "param": "customer.phone",
+    "request_id": "req_01HABC..."
+  }
+}
+```
+
+| Status | Meaning |
+| --- | --- |
+| `200` | Success |
+| `201` | Created |
+| `400` | Invalid request |
+| `401` | Missing or invalid API key |
+| `403` | API key lacks the required scope |
+| `404` | Resource not found |
+| `409` | Idempotency conflict |
+| `422` | Business rule violation |
+| `429` | Rate limited |
+| `5xx` | RabbitPay error — safe to retry |
+
+## Rate limits
+
+Default: **100 requests / second** per API key. Response headers include:
+
+```text
+X-RateLimit-Limit: 100
+X-RateLimit-Remaining: 87
+X-RateLimit-Reset: 1729353605
+```
+
+Contact [support@rabbitpay.ai](mailto:support@rabbitpay.ai) to request a higher limit.

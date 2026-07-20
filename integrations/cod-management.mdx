@@ -1,0 +1,87 @@
+---
+title: "COD Management"
+description: "Reduce RTO with OTP verification, risk scoring, and COD rules."
+icon: "money-bill-wave"
+---
+
+Cash on Delivery remains the dominant payment method in India — but it also drives **RTO (Return to Origin)** rates as high as 30–40%. RabbitPay's COD Management suite gives you the tools to keep COD available without eating margin.
+
+## What's included
+
+<CardGroup cols={2}>
+  <Card title="OTP verification" icon="shield-check">
+    Every COD order requires a mobile OTP before creation, filtering junk orders.
+  </Card>
+
+  <Card title="Risk scoring" icon="gauge-high">
+    Shoppers are scored 0–100 based on history, device, and pincode. Block or downgrade high-risk sessions automatically.
+  </Card>
+
+  <Card title="COD rules engine" icon="sliders">
+    Disable COD by cart value, SKU, pincode, or shopper cohort.
+  </Card>
+
+  <Card title="Reconciliation" icon="scale-balanced">
+    Match courier remittances to orders and flag shortfalls automatically.
+  </Card>
+</CardGroup>
+
+## Create a COD rule
+
+```bash
+curl https://api.rabbitpay.ai/v1/cod/rules \
+  -H "Authorization: Bearer sk_live_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Block risky pincodes",
+    "action": "disable_cod",
+    "conditions": {
+      "pincodes": ["110001", "400001"],
+      "risk_score_gte": 70
+    }
+  }'
+```
+
+## Risk scoring API
+
+Call the risk API server-side before rendering payment options if you want custom UI treatment.
+
+```javascript
+const risk = await rabbitpay.cod.risk.evaluate({
+  phone: '+919876543210',
+  pincode: '560001',
+  cart_value: 349900,
+});
+
+// {
+//   score: 22,
+//   band: 'low',
+//   recommendation: 'allow_cod',
+//   reasons: ['returning_shopper', 'verified_pincode']
+// }
+```
+
+| Band | Score | Recommendation |
+| --- | --- | --- |
+| `low` | 0–39 | Allow COD |
+| `medium` | 40–69 | Prefer partial payment |
+| `high` | 70–100 | Disable COD |
+
+## Reconciliation report
+
+Download monthly reconciliation reports from the dashboard or via API.
+
+```bash
+curl https://api.rabbitpay.ai/v1/cod/reconciliation?month=2026-06 \
+  -H "Authorization: Bearer sk_live_your_key"
+```
+
+The report matches each COD order to a courier remittance and flags:
+
+- **Short remit** — courier remitted less than the COD amount
+- **Missing remit** — COD amount never remitted
+- **Duplicate remit** — same order remitted twice
+
+<Tip>
+  Enable the **Auto-dispute** setting in the dashboard to file shortfalls with your logistics provider automatically.
+</Tip>

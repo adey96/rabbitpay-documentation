@@ -1,0 +1,110 @@
+---
+title: "Quick Start"
+description: "Go from zero to your first RabbitPay test order in under 10 minutes."
+icon: "bolt"
+---
+
+This guide walks you through creating an account, generating API keys, and firing your first checkout session against the RabbitPay **test environment**.
+
+## Prerequisites
+
+- A RabbitPay merchant account — [sign up here](https://dashboard.rabbitpay.ai/signup)
+- A Shopify store (Basic plan or higher) if you want to test the full flow
+- `curl`, Node.js 18\+, or Python 3.9\+ for the code examples
+
+## 1. Create API keys
+
+In the [RabbitPay Dashboard](https://dashboard.rabbitpay.ai), navigate to **Developers → API Keys** and click **Create key**. You'll see two keys:
+
+| Key | Prefix | Use |
+| --- | --- | --- |
+| Publishable | `pk_test_...` | Client-side (checkout widget) |
+| Secret | `sk_test_...` | Server-side (API calls, webhooks) |
+
+<Warning>
+  Never expose your **secret key** in client-side code, git, or logs.
+</Warning>
+
+## 2. Create your first checkout session
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.rabbitpay.ai/v1/checkout/sessions \
+  -H "Authorization: Bearer sk_test_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 149900,
+    "currency": "INR",
+    "customer": { "phone": "+919876543210" },
+    "line_items": [
+      { "sku": "TSHIRT-BLK-M", "quantity": 1, "price": 149900 }
+    ],
+    "success_url": "https://yourstore.com/thank-you"
+  }'
+```
+
+```javascript Node.js
+import RabbitPay from '@rabbitpay/node';
+
+const rabbitpay = new RabbitPay('sk_test_your_key');
+
+const session = await rabbitpay.checkout.sessions.create({
+  amount: 149900,
+  currency: 'INR',
+  customer: { phone: '+919876543210' },
+  line_items: [
+    { sku: 'TSHIRT-BLK-M', quantity: 1, price: 149900 },
+  ],
+  success_url: 'https://yourstore.com/thank-you',
+});
+
+console.log(session.checkout_url);
+```
+
+```python Python
+import rabbitpay
+
+rabbitpay.api_key = "sk_test_your_key"
+
+session = rabbitpay.checkout.Session.create(
+    amount=149900,
+    currency="INR",
+    customer={"phone": "+919876543210"},
+    line_items=[
+        {"sku": "TSHIRT-BLK-M", "quantity": 1, "price": 149900},
+    ],
+    success_url="https://yourstore.com/thank-you",
+)
+
+print(session.checkout_url)
+```
+
+</CodeGroup>
+
+### Example response
+
+```json
+{
+  "id": "cs_test_a1B2c3D4",
+  "object": "checkout.session",
+  "status": "open",
+  "amount": 149900,
+  "currency": "INR",
+  "checkout_url": "https://checkout.rabbitpay.ai/c/cs_test_a1B2c3D4",
+  "expires_at": 1729440000,
+  "created_at": 1729353600
+}
+```
+
+## 3. Complete a test purchase
+
+Open the `checkout_url` in a browser. Use the test OTP `123456` and the test card `4242 4242 4242 4242`. When the session completes, RabbitPay fires a `checkout.session.completed` webhook — see [Webhooks](/api/webhooks) to receive it.
+
+## 4. Go live
+
+When you're ready, swap `sk_test_...` for `sk_live_...` and point your webhook endpoint at production. That's it.
+
+<Card title="Next: Install on Shopify" icon="shopify" href="/integrations/shopify">
+  Ship 1-Click Checkout to your Shopify storefront in about 5 minutes.
+</Card>

@@ -1,0 +1,78 @@
+---
+title: "Order Management"
+description: "Manage orders, fulfillment status, refunds, and cancellations."
+icon: "box"
+---
+
+Orders created through RabbitPay live in **both** RabbitPay and Shopify. Shopify remains the source of truth for fulfillment; RabbitPay is the source of truth for payment, COD, and risk.
+
+## Lifecycle
+
+```text
+pending → paid → fulfilled → delivered
+                ↘ cancelled
+                ↘ refunded (partial or full)
+```
+
+| Status | Meaning |
+| --- | --- |
+| `pending` | Session completed, awaiting payment capture (COD or async UPI) |
+| `paid` | Payment captured (fully or the prepaid portion of a partial) |
+| `fulfilled` | Marked fulfilled in Shopify |
+| `delivered` | Delivery confirmed (COD collected) |
+| `cancelled` | Cancelled before fulfillment |
+| `refunded` | One or more refunds issued |
+
+## Fetching orders
+
+```bash
+curl "https://api.rabbitpay.ai/v1/orders?status=paid&limit=50" \
+  -H "Authorization: Bearer sk_live_your_key"
+```
+
+## Updating an order
+
+Most order updates flow **from Shopify** (fulfillment, tags, notes). RabbitPay syncs these via Shopify webhooks. You can also add metadata directly:
+
+```bash
+curl https://api.rabbitpay.ai/v1/orders/ord_01H8Z... \
+  -X PATCH \
+  -H "Authorization: Bearer sk_live_your_key" \
+  -d '{ "metadata": { "warehouse": "BLR-2" } }'
+```
+
+## Cancellations
+
+Cancellations must originate in Shopify Admin (or via the Shopify Admin API). RabbitPay listens to `orders/cancelled` and automatically:
+
+1. Refunds the prepaid amount (if any)
+2. Marks the RabbitPay order `cancelled`
+3. Fires `order.cancelled` webhook
+
+## Refunds
+
+Issue refunds via API or Dashboard. Refunds route back to the original payment method — UPI to UPI, card to card. **COD balances cannot be refunded via API**; handle them out-of-band.
+
+```bash
+curl https://api.rabbitpay.ai/v1/refunds \
+  -H "Authorization: Bearer sk_live_your_key" \
+  -H "Idempotency-Key: refund-order-8471" \
+  -d '{
+    "order_id": "ord_01H8Z9K7P2Y",
+    "amount": 74950,
+    "reason": "partial_return"
+  }'
+```
+
+### Refund reasons
+
+- `customer_request`
+- `duplicate`
+- `fraudulent`
+- `product_defect`
+- `partial_return`
+- `other`
+
+## Exports
+
+Export orders as CSV or JSON from Dashboard → **Orders → Export**, or fetch scheduled exports via the Reports API. Exports include the full RabbitPay risk and COD reconciliation columns not available in Shopify.

@@ -1,0 +1,122 @@
+---
+title: "SDKs and Libraries"
+description: "Official RabbitPay SDKs for Node.js, Python, PHP, Ruby, and the browser."
+icon: "cubes"
+---
+
+Official SDKs wrap the REST API, handle auth, retries, and idempotency, and give you typed access to every resource.
+
+<CardGroup cols={2}>
+  <Card title="Node.js" icon="node-js" href="https://github.com/rabbitpay/rabbitpay-node">
+    `npm install @rabbitpay/node`
+  </Card>
+
+  <Card title="Python" icon="python" href="https://github.com/rabbitpay/rabbitpay-python">
+    `pip install rabbitpay`
+  </Card>
+
+  <Card title="PHP" icon="php" href="https://github.com/rabbitpay/rabbitpay-php">
+    `composer require rabbitpay/rabbitpay-php`
+  </Card>
+
+  <Card title="Ruby" icon="gem" href="https://github.com/rabbitpay/rabbitpay-ruby">
+    `gem install rabbitpay`
+  </Card>
+
+  <Card title="Go" icon="golang" href="https://github.com/rabbitpay/rabbitpay-go">
+    `go get github.com/rabbitpay/rabbitpay-go`
+  </Card>
+
+  <Card title="JavaScript (browser)" icon="js" href="https://js.rabbitpay.ai">
+    `<script src="https://js.rabbitpay.ai/v1">`
+  </Card>
+</CardGroup>
+
+## Node.js
+
+```javascript
+import RabbitPay from '@rabbitpay/node';
+
+const rabbitpay = new RabbitPay(process.env.RABBITPAY_SECRET_KEY, {
+  apiVersion: '2026-07-01',
+  maxRetries: 3,
+  timeout: 10_000,
+});
+
+const session = await rabbitpay.checkout.sessions.create({
+  amount: 149900,
+  currency: 'INR',
+  customer: { phone: '+919876543210' },
+  line_items: [{ sku: 'TSHIRT', quantity: 1, price: 149900 }],
+  success_url: 'https://yourstore.com/thank-you',
+});
+```
+
+## Python
+
+```python
+import rabbitpay
+
+rabbitpay.api_key = os.environ["RABBITPAY_SECRET_KEY"]
+rabbitpay.api_version = "2026-07-01"
+
+session = rabbitpay.checkout.Session.create(
+    amount=149900,
+    currency="INR",
+    customer={"phone": "+919876543210"},
+    line_items=[{"sku": "TSHIRT", "quantity": 1, "price": 149900}],
+    success_url="https://yourstore.com/thank-you",
+)
+```
+
+## PHP
+
+```php
+$rabbitpay = new \RabbitPay\Client(getenv('RABBITPAY_SECRET_KEY'));
+
+$session = $rabbitpay->checkout->sessions->create([
+    'amount' => 149900,
+    'currency' => 'INR',
+    'customer' => ['phone' => '+919876543210'],
+    'line_items' => [['sku' => 'TSHIRT', 'quantity' => 1, 'price' => 149900]],
+    'success_url' => 'https://yourstore.com/thank-you',
+]);
+```
+
+## Ruby
+
+```ruby
+Rabbitpay.api_key = ENV['RABBITPAY_SECRET_KEY']
+
+session = Rabbitpay::Checkout::Session.create(
+  amount: 149_900,
+  currency: 'INR',
+  customer: { phone: '+919876543210' },
+  line_items: [{ sku: 'TSHIRT', quantity: 1, price: 149_900 }],
+  success_url: 'https://yourstore.com/thank-you',
+)
+```
+
+## Browser JS
+
+```html
+<script src="https://js.rabbitpay.ai/v1"></script>
+<script>
+  const rabbitpay = RabbitPay('pk_live_your_key');
+
+  rabbitpay.checkout.open({
+    url: 'https://checkout.rabbitpay.ai/c/cs_live_a1B2c3D4',
+    onSuccess: (session) => console.log('paid', session.id),
+    onCancel: () => console.log('cancelled'),
+  });
+</script>
+```
+
+## Community SDKs
+
+- **Java** — [rabbitpay-java](https://github.com/rabbitpay-community/rabbitpay-java) (community-maintained)
+- **.NET** — [RabbitPay.NET](https://github.com/rabbitpay-community/rabbitpay-dotnet) (community-maintained)
+
+<Note>
+  Community SDKs are not officially supported. File issues directly on their repositories.
+</Note>

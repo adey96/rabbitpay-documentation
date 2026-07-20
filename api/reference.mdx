@@ -1,0 +1,212 @@
+---
+title: "API Reference"
+description: "Complete reference for the RabbitPay REST API."
+icon: "code"
+---
+
+The RabbitPay REST API is organized around **resources**. All requests and responses use JSON, and every mutating call is idempotent.
+
+<Info>
+  Base URL: `https://api.rabbitpay.ai/v1` — see [Authentication](/api/authentication).
+</Info>
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="Checkout Sessions" icon="cart-shopping">
+    Create and retrieve 1-Click Checkout sessions.
+  </Card>
+
+  <Card title="Orders" icon="box">
+    Read and manage orders synced with Shopify.
+  </Card>
+
+  <Card title="Refunds" icon="rotate-left">
+    Issue full or partial refunds.
+  </Card>
+
+  <Card title="Customers" icon="user">
+    Look up saved shoppers and their addresses.
+  </Card>
+</CardGroup>
+
+---
+
+## Checkout Sessions
+
+### Create a session
+
+<ParamField path="amount" type="integer" required>
+  Amount in the smallest currency unit (e.g. paise for INR).
+</ParamField>
+
+<ParamField path="currency" type="string" required>
+  Three-letter ISO 4217 currency code. Currently `INR` only.
+</ParamField>
+
+<ParamField path="customer.phone" type="string" required>
+  E.164 phone number. RabbitPay uses this to fetch saved profiles.
+</ParamField>
+
+<ParamField path="line_items" type="array" required>
+  Array of `{ sku, quantity, price }` objects.
+</ParamField>
+
+<ParamField path="success_url" type="string" required>
+  Absolute URL to redirect the shopper to after successful checkout.
+</ParamField>
+
+<ParamField path="metadata" type="object">
+  Arbitrary key/value pairs (max 20 keys) attached to the session.
+</ParamField>
+
+**Request**
+
+```bash
+POST /v1/checkout/sessions
+```
+
+```json
+{
+  "amount": 149900,
+  "currency": "INR",
+  "customer": { "phone": "+919876543210" },
+  "line_items": [
+    { "sku": "TSHIRT-BLK-M", "quantity": 1, "price": 149900 }
+  ],
+  "success_url": "https://yourstore.com/thank-you",
+  "metadata": { "cart_id": "c_9821" }
+}
+```
+
+**Response**
+
+```json
+{
+  "id": "cs_live_a1B2c3D4",
+  "object": "checkout.session",
+  "status": "open",
+  "amount": 149900,
+  "currency": "INR",
+  "payment_method": null,
+  "checkout_url": "https://checkout.rabbitpay.ai/c/cs_live_a1B2c3D4",
+  "expires_at": 1729440000,
+  "created_at": 1729353600,
+  "metadata": { "cart_id": "c_9821" }
+}
+```
+
+### Retrieve a session
+
+```bash
+GET /v1/checkout/sessions/{id}
+```
+
+### Expire a session
+
+```bash
+POST /v1/checkout/sessions/{id}/expire
+```
+
+---
+
+## Orders
+
+### List orders
+
+```bash
+GET /v1/orders?limit=25&status=paid
+```
+
+**Query parameters**
+
+   
+
+### Retrieve an order
+
+```bash
+GET /v1/orders/{id}
+```
+
+```json
+{
+  "id": "ord_01H8Z9K7P2Y",
+  "object": "order",
+  "shopify_order_id": "5834729103",
+  "amount": 149900,
+  "currency": "INR",
+  "payment_method": "prepaid",
+  "status": "paid",
+  "customer": {
+    "id": "cust_01H8Z...",
+    "phone": "+919876543210",
+    "email": "buyer@example.com"
+  },
+  "line_items": [
+    { "sku": "TSHIRT-BLK-M", "quantity": 1, "price": 149900 }
+  ],
+  "created_at": 1729353600
+}
+```
+
+---
+
+## Refunds
+
+### Create a refund
+
+```bash
+POST /v1/refunds
+```
+
+```json
+{
+  "order_id": "ord_01H8Z9K7P2Y",
+  "amount": 149900,
+  "reason": "customer_request"
+}
+```
+
+**Response**
+
+```json
+{
+  "id": "re_01H8ZA...",
+  "object": "refund",
+  "order_id": "ord_01H8Z9K7P2Y",
+  "amount": 149900,
+  "status": "succeeded",
+  "created_at": 1729440000
+}
+```
+
+---
+
+## Customers
+
+### Retrieve by phone
+
+```bash
+GET /v1/customers?phone=%2B919876543210
+```
+
+---
+
+## Pagination
+
+List endpoints use cursor-based pagination:
+
+```json
+{
+  "object": "list",
+  "data": [ /* ... */ ],
+  "has_more": true,
+  "next_cursor": "ord_01H8Z9K7P2Y"
+}
+```
+
+Pass `?starting_after=ord_01H8Z9K7P2Y` to fetch the next page.
+
+## Versioning
+
+The API is versioned via the URL path (`/v1`). Breaking changes are shipped as `/v2`. Non-breaking additions are made in-place. See the [Changelog](/support/changelog) for release notes.

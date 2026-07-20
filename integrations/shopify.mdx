@@ -1,0 +1,97 @@
+---
+title: "Shopify Integration"
+description: "Install RabbitPay on Shopify and configure 1-Click Checkout end to end."
+icon: "shopify"
+---
+
+RabbitPay is a certified Shopify app that installs in minutes and syncs orders, customers, and inventory bidirectionally.
+
+## What gets installed
+
+- A native **Shopify app** in your admin
+- A **theme app extension** that renders the Buy Now button
+- Webhook subscriptions for `orders/*`, `refunds/*`, and `customers/*`
+- A private connection to the RabbitPay backend for order creation and updates
+
+## Requirements
+
+- Shopify plan: **Basic** or higher
+- Any published theme running **Online Store 2.0**
+- A RabbitPay account with **Shopify** enabled
+
+## Install steps
+
+<Steps>
+  <Step title="Install from the Shopify App Store">
+    Go to [apps.shopify.com/rabbitpay](https://apps.shopify.com/rabbitpay) and click **Add app**. Approve the requested scopes.
+
+    | Scope | Purpose |
+    | --- | --- |
+    | `read_products` | Fetch product details for checkout |
+    | `write_orders` | Create orders on successful checkout |
+    | `read_customers` | Match returning shoppers |
+    | `write_draft_orders` | Handle partial payments and COD |
+    | `read_inventory` | Enforce stock before authorization |
+  </Step>
+  <Step title="Connect your RabbitPay merchant account">
+    On first launch, log in with your RabbitPay credentials. The app links your Shopify store to your RabbitPay merchant ID.
+  </Step>
+  <Step title="Enable the theme app embed">
+    From Shopify Admin → **Online Store → Themes → Customize**, open the **App embeds** panel and toggle **RabbitPay Buy Now** on. Save.
+  </Step>
+  <Step title="Configure checkout settings">
+    In the RabbitPay app → **Settings**, choose which SKUs, collections, or customer segments the Buy Now button appears for. Configure COD eligibility, partial payment thresholds, and shipping rules.
+  </Step>
+  <Step title="Test in draft mode">
+    Toggle **Test mode** in the app. Complete a test purchase using OTP `123456`. Verify the draft order appears in Shopify Admin → Orders.
+  </Step>
+  <Step title="Go live">
+    Flip **Test mode** off. Buy Now goes live for all matching products immediately.
+  </Step>
+</Steps>
+
+## Order sync
+
+When a shopper completes checkout, RabbitPay creates the order on Shopify via the Admin API and applies the following mapping:
+
+| RabbitPay field | Shopify field |
+| --- | --- |
+| `line_items[].sku` | `line_items[].sku` |
+| `customer.phone` | `customer.phone` |
+| `shipping_address` | `shipping_address` |
+| `payment_method` | Order tag: `rabbitpay:prepaid`, `rabbitpay:cod`, `rabbitpay:partial` |
+| `session.id` | Order note attribute: `rabbitpay_session_id` |
+
+<Tip>
+  Use the `rabbitpay_session_id` note attribute to correlate Shopify orders with RabbitPay sessions in your BI or warehouse.
+</Tip>
+
+## Webhooks from Shopify → RabbitPay
+
+RabbitPay subscribes to these Shopify topics automatically:
+
+- `orders/create`, `orders/updated`, `orders/cancelled`, `orders/fulfilled`
+- `refunds/create`
+- `customers/create`, `customers/update`
+
+These keep RabbitPay's records in sync when merchants edit orders directly in Shopify Admin.
+
+## Uninstalling
+
+Removing the RabbitPay app from Shopify immediately disables the Buy Now button. Existing orders remain intact. RabbitPay retains order records for 90 days and then purges customer PII per our [Data Retention Policy](https://rabbitpay.ai/legal/data-retention).
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Buy Now button not appearing">
+    Confirm the app embed is enabled **and** the theme is published (not just saved). Check that the product isn't in an excluded collection under app settings.
+  </Accordion>
+
+  <Accordion title="Orders not showing in Shopify">
+    Open the RabbitPay Dashboard → Sessions and inspect the session. Look for a `shopify.order_create_failed` error — usually caused by inventory or shipping zone misconfiguration.
+  </Accordion>
+
+  <Accordion title="Discounts not applying">
+    RabbitPay respects Shopify automatic discounts and script-based discounts. Discount codes must be enabled per SKU in the RabbitPay app settings.
+  </Accordion>
+</AccordionGroup>

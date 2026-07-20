@@ -1,0 +1,139 @@
+---
+title: "Webhooks"
+description: "Subscribe to real-time RabbitPay events — orders, payments, refunds, and more."
+icon: "webhook"
+---
+
+Webhooks are the recommended way to react to RabbitPay events in your backend. Rather than polling, RabbitPay `POST`s a signed JSON payload to your endpoint when something interesting happens.
+
+## Register an endpoint
+
+Create a webhook endpoint in the Dashboard → **Developers → Webhooks**, or via API:
+
+```bash
+curl https://api.rabbitpay.ai/v1/webhooks \
+  -H "Authorization: Bearer sk_live_your_key" \
+  -d '{
+    "url": "https://yourapp.com/rabbitpay/webhook",
+    "events": [
+      "checkout.session.completed",
+      "order.paid",
+      "order.fulfilled",
+      "refund.succeeded"
+    ]
+  }'
+```
+
+## Event types
+
+| Event | When it fires |
+| --- | --- |
+| `checkout.session.created` | New checkout session created |
+| `checkout.session.completed` | Shopper completed checkout |
+| `checkout.session.expired` | Session expired without completion |
+| `order.paid` | Order fully paid (prepaid or partial prepaid captured) |
+| `order.fulfilled` | Order marked fulfilled in Shopify |
+| `order.cancelled` | Order cancelled |
+| `refund.succeeded` | Refund processed |
+| `refund.failed` | Refund attempt failed |
+| `cod.remitted` | Courier remitted COD amount |
+| `cod.short_remit` | COD remittance was short |
+
+## Example payload
+
+```json
+{
+  "id": "evt_01H8ZB...",
+  "object": "event",
+  "type": "order.paid",
+  "created_at": 1729353600,
+  "data": {
+    "object": {
+      "id": "ord_01H8Z9K7P2Y",
+      "amount": 149900,
+      "currency": "INR",
+      "payment_method": "prepaid",
+      "status": "paid",
+      "customer": { "phone": "+919876543210" }
+    }
+  }
+}
+```
+
+## Verifying signatures
+
+Every webhook includes a `RabbitPay-Signature` header:
+
+```text
+RabbitPay-Signature: t=1729353600,v1=5257a869e7ecebeda3...
+```
+
+Compute the HMAC-SHA256 of `t.body` using your endpoint's signing secret (`whsec_...`) and compare in constant time.
+
+<CodeGroup>
+
+```javascript Node.js
+import crypto from 'crypto';
+
+function verify(req, secret) {
+  const header = req.headers['rabbitpay-signature'];
+  const [tPart, v1Part] = header.split(',');
+  const t = tPart.split('=')[1];
+  const v1 = v1Part.split('=')[1];
+
+  const signed = `${t}.${req.rawBody}`;
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(signed)
+    .digest('hex');
+
+  return crypto.timingSafeEqual(
+    Buffer.from(v1),
+    Buffer.from(expected),
+  );
+}
+```
+
+```python Python
+import hmac, hashlib
+
+def verify(payload: bytes, header: str, secret: str) -> bool:
+    parts = dict(p.split("=", 1) for p in header.split(","))
+    signed = f"{parts['t']}.{payload.decode()}".encode()
+    expected = hmac.new(secret.encode(), signed, hashlib.sha256).hexdigest()
+    return hmac.compare_digest(parts["v1"], expected)
+```
+
+```php PHP
+function verify(string $payload, string $header, string $secret): bool {
+    parse_str(str_replace(',', '&', $header), $parts);
+    $signed = $parts['t'] . '.' . $payload;
+    $expected = hash_hmac('sha256', $signed, $secret);
+    return hash_equals($expected, $parts['v1']);
+}
+```
+
+</CodeGroup>
+
+<Warning>
+  Reject requests older than 5 minutes based on the `t` timestamp to prevent replay attacks.
+</Warning>
+
+## Retries
+
+RabbitPay retries failed deliveries with exponential backoff for **72 hours**:
+
+- 1st retry: 1 minute
+- 2nd: 5 minutes
+- 3rd: 30 minutes
+- 4th–10th: 1, 2, 4, 8, 12, 24, 48 hours
+
+Your endpoint should return `2xx` within **5 seconds**. Anything else is treated as a failure.
+
+## Debugging
+
+Use the Dashboard → **Developers → Webhook attempts** to inspect every delivery, replay events, or download the raw payload for local testing.
+
+<Tip>
+  Use [Mintlify Webhook CLI](https://github.com/mintlify/webhook-cli) or `ngrok` to receive real webhooks against your local dev server.
+</Tip>

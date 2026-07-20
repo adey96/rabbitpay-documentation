@@ -1,0 +1,56 @@
+---
+title: "Changelog"
+description: "Product and API release notes for RabbitPay."
+icon: "clock-rotate-left"
+---
+
+All notable changes to the RabbitPay platform and API are listed here. We follow [Semantic Versioning](https://semver.org/) for API changes.
+
+<Update label="v1.8.0" description="2026-07-15">
+  **New**
+
+  - `cod.remitted` and `cod.short_remit` webhook events.
+  - Restricted keys can now be scoped down to individual event types.
+  - Hindi, Tamil, Telugu, Marathi, and Bengali translations in the checkout drawer.
+
+  **Improved**
+
+  - Median time-to-OTP reduced from 4.2s to 2.6s.
+  - Session `metadata` limit raised from 10 to 20 keys.
+
+  **Fixed**
+
+  - Occasional duplicate `order.paid` webhook on network flaps.
+</Update>
+
+<Update label="v1.7.0" description="2026-05-28">
+  **New**
+
+  - Partial payments rules engine (see [Partial Payments](/integrations/partial-payments)).
+  - `checkout.session.abandoned` webhook for cart recovery workflows.
+  - Ruby SDK 1.0 released.
+
+  **Improved**
+
+  - COD risk model v3 rolled out — average RTO reduction 4.1 percentage points in beta cohorts.
+</Update>
+
+<Update label="v1.6.0" description="2026-04-10">
+  **New**
+
+  - Go SDK.
+  - Reports API for scheduled CSV/JSON exports.
+
+  **Breaking (opt-in via API version `2026-04-01`)**
+
+  - `line_items[].price` is now required (was inferred from SKU).
+</Update>
+
+<Update label="v1.5.0" description="2026-02-22">
+  - Idempotency keys are now honored for 24 hours (was 1 hour).
+  - Dashboard → **Developers → Webhook attempts** now supports search and replay.
+</Update>
+
+<Update label="v1.0.0" description="2025-11-01">
+  Initial public release of the RabbitPay REST API and Shopify app.
+</Update>

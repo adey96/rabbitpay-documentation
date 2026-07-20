@@ -1,0 +1,99 @@
+---
+title: "Installation"
+description: "Install RabbitPay on Shopify or wire it into a headless storefront."
+icon: "download"
+---
+
+RabbitPay can be installed in two ways depending on your stack.
+
+<Tabs>
+  <Tab title="Shopify (recommended)">
+    The easiest path — a native Shopify app with theme extensions.
+
+    <Steps>
+      <Step title="Install the app">
+        Visit the [RabbitPay listing on the Shopify App Store](https://apps.shopify.com/rabbitpay) and click **Add app**.
+      </Step>
+      <Step title="Authorize scopes">
+        Approve the requested scopes: `read_products`, `write_orders`, `read_customers`, `write_draft_orders`.
+      </Step>
+      <Step title="Enable the theme extension">
+        In your Shopify admin, go to **Online Store → Themes → Customize** and enable the **RabbitPay Buy Now** app embed.
+      </Step>
+      <Step title="Publish">
+        Save the theme. The Buy Now button is now live on your product pages.
+      </Step>
+    </Steps>
+  </Tab>
+  <Tab title="Headless / custom storefront">
+    Use the RabbitPay JavaScript SDK to render checkout anywhere.
+
+    ```bash
+    npm install @rabbitpay/js
+    ```
+
+    ```html
+    <script src="https://js.rabbitpay.ai/v1"></script>
+    <button id="buy-now">Buy Now</button>
+    
+    <script>
+      const rabbitpay = RabbitPay('pk_test_your_key');
+    
+      document.getElementById('buy-now').addEventListener('click', async () => {
+        const { checkout_url } = await fetch('/api/create-session', {
+          method: 'POST',
+        }).then(r => r.json());
+    
+        rabbitpay.checkout.open({ url: checkout_url });
+      });
+    </script>
+    ```
+  </Tab>
+  <Tab title="Server SDKs">
+    Install a server SDK to call the API.
+
+    ```bash Node.js
+    npm install @rabbitpay/node
+    ```
+
+    ```bash Python
+    pip install rabbitpay
+    ```
+
+    ```bash PHP
+    composer require rabbitpay/rabbitpay-php
+    ```
+
+    ```bash Ruby
+    gem install rabbitpay
+    ```
+  </Tab>
+</Tabs>
+
+## Environment configuration
+
+Store your API keys in environment variables — never commit them.
+
+```bash .env
+RABBITPAY_PUBLISHABLE_KEY=pk_test_...
+RABBITPAY_SECRET_KEY=sk_test_...
+RABBITPAY_WEBHOOK_SECRET=whsec_...
+```
+
+## Verify the install
+
+On a product page, the RabbitPay **Buy Now** button should render below Add to Cart. Clicking it opens the RabbitPay drawer. If it doesn't appear:
+
+<AccordionGroup>
+  <Accordion title="Button doesn't render on the storefront">
+    Confirm the theme app embed is enabled and the theme has been published. Clear the Shopify theme cache and reload.
+  </Accordion>
+
+  <Accordion title="401 Unauthorized on API calls">
+    Verify you're using the correct key for the environment. `sk_test_...` keys only work against `api.rabbitpay.ai` in test mode.
+  </Accordion>
+
+  <Accordion title="Webhooks not received">
+    Check that your endpoint is publicly reachable and returning 2xx within 5s. See [Webhooks → Debugging](/api/webhooks#debugging).
+  </Accordion>
+</AccordionGroup>
