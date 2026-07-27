@@ -23,7 +23,15 @@
           "integrations/shopify-integration",
           "integrations/partial-payments",
           "integrations/cod-management",
-          "integrations/razorpay-setup"
+          {
+            "group": "Razorpay Integration",
+            "icon": "credit-card",
+            "pages": [
+              "integrations/razorpay/generate-api-token",
+              "integrations/razorpay/configure-webhook",
+              "integrations/razorpay/generate-qr-code"
+            ]
+          }
         ]
       },
       {
