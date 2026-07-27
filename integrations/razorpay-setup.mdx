@@ -1,0 +1,233 @@
+---
+title: "Razorpay Integration Setup"
+description: "Configure Razorpay API keys, webhooks, and QR functionality so RabbitPay can accept payments on your behalf."
+icon: "credit-card"
+---
+
+## Overview
+
+RabbitPay processes payments through your **Razorpay** account. Before merchants can start accepting payments through the RabbitPay checkout, a few Razorpay configurations must be in place.
+
+This guide walks you through:
+
+1. Generating **Razorpay API Keys**
+2. Configuring the required **Webhook**
+3. Creating a **QR Code** for payment support
+
+<Note>
+  The entire setup takes approximately **5–10 minutes**. Keep your Razorpay Dashboard and RabbitPay Dashboard open in adjacent tabs.
+</Note>
+
+---
+
+## Prerequisites
+
+Before you begin, make sure you have:
+
+- An active **Razorpay Business Account**
+- **Admin access** to the Razorpay Dashboard
+- Access to your **RabbitPay Dashboard**
+- A **stable internet connection**
+
+<Tip>
+  If you don't yet have a Razorpay Business Account, sign up at [razorpay.com](https://razorpay.com) and complete KYC before continuing. RabbitPay cannot accept live payments through a Razorpay test account.
+</Tip>
+
+---
+
+## Step 1 — Login to Razorpay Dashboard
+
+Log in to your Razorpay Dashboard at [dashboard.razorpay.com](https://dashboard.razorpay.com) using your admin credentials.
+
+Once inside the dashboard, navigate to:
+
+1. **Account & Settings**
+2. **Website and App Settings**
+3. **Business Website Details**
+
+This section stores the business information Razorpay uses when displaying your brand during checkout and on payment receipts. Before proceeding, verify that your business name, website URL, and support contact details are correctly configured. Incorrect information here can cause payments to be flagged or delayed by Razorpay's risk team.
+
+<Frame caption="Screenshot: Razorpay → Account & Settings → Business Website Details">
+  _Screenshot placeholder — Business Website Details page._
+</Frame>
+
+---
+
+## Step 2 — Generate API Keys
+
+RabbitPay communicates securely with Razorpay using **API credentials**. Every API call from RabbitPay to Razorpay is signed with your `Key ID` and `Key Secret`.
+
+Navigate to:
+
+1. **Account & Settings**
+2. **API Keys**
+
+Then follow the steps below based on whether keys already exist.
+
+### If API Keys already exist
+
+1. Locate the existing **Key ID** in the API Keys section.
+2. Copy the **Key ID** and paste it into a secure location.
+3. If you still have the **Key Secret** stored from a previous setup, copy that as well.
+4. Store both credentials securely (a password manager is recommended).
+
+### If no API Keys exist
+
+1. Click **Generate Key** (or **Regenerate Key** if you want to replace an existing set).
+2. Confirm the action when Razorpay prompts you.
+3. Copy the newly generated **Key ID**.
+4. Copy the **Key Secret immediately** — Razorpay displays it **only once** and you cannot retrieve it later.
+5. Store both credentials securely.
+
+<Note>
+  **Never share your Key Secret publicly or commit it to Git repositories.** Anyone with your Key Secret can initiate payments on your behalf. If you suspect the secret has leaked, regenerate the key from the same screen immediately.
+</Note>
+
+<Frame caption="Screenshot: Razorpay → Account & Settings → API Keys">
+  _Screenshot placeholder — Razorpay API Keys page showing Generate Key button._
+</Frame>
+
+---
+
+## Step 3 — Configure Razorpay Webhook
+
+A **webhook** is an HTTP callback that Razorpay sends to RabbitPay whenever something happens to a payment — for example, a payment is captured or an order is created. Without webhooks, RabbitPay cannot update payment status in real time.
+
+RabbitPay uses Razorpay webhooks to receive updates for:
+
+- **Payment Captured**
+- **Order Created**
+- **Subscription Updates**
+- **QR Payments**
+
+### Add the webhook
+
+Navigate to:
+
+1. **Account & Settings**
+2. **Website and App Settings**
+3. **Webhooks**
+
+Then:
+
+1. Click **Add New Webhook**.
+2. Enter the following **Webhook URL**:
+   ```text
+   https://dashboard.rabbitpay.ai/api/razorpay/webhook
+   ```
+3. Enter the following **Secret**:
+   ```text
+   rabbit@321
+   ```
+4. Enable the following event groups:
+   - **Payment Events**
+   - **Order Events**
+   - **Subscription Events**
+   - **QR Events**
+5. Click **Create Webhook** to save.
+
+Enabling all four event groups ensures RabbitPay receives every payment lifecycle notification — from order creation to final capture and refund.
+
+<Warning>
+  Changing the webhook URL or webhook secret without updating RabbitPay may cause payment status synchronization issues. If you must rotate the secret, contact [support@rabbitpay.ai](mailto:support@rabbitpay.ai) so we can update it on our side at the same time.
+</Warning>
+
+<Frame caption="Screenshot: Razorpay → Webhooks → Add New Webhook">
+  _Screenshot placeholder — Add New Webhook form._
+</Frame>
+
+<Frame caption="Screenshot: Razorpay → Webhooks → Event group selection">
+  _Screenshot placeholder — Payment / Order / Subscription / QR event groups._
+</Frame>
+
+---
+
+## Step 4 — Create Razorpay QR Code
+
+RabbitPay supports **UPI QR payments** at checkout. To enable this, Razorpay requires that QR functionality has been activated at least once on your account.
+
+<Note>
+  RabbitPay does **not** use the QR image itself. You do not need to upload the QR anywhere in RabbitPay. Simply generating a QR once activates QR payment functionality on your Razorpay account, which is what RabbitPay needs.
+</Note>
+
+Navigate to:
+
+1. **Payments**
+2. **QR Codes**
+
+Then:
+
+1. Open the **QR Codes** page.
+2. Click **Create QR Code**.
+3. **Leave every setting at its default value** — do not customize the amount, description, or expiry.
+4. Click **Create QR Code** to confirm.
+5. Wait until Razorpay finishes generating the QR.
+6. Download the QR Code for your records (optional).
+
+Once the QR is generated, QR payment functionality is active on your Razorpay account and RabbitPay can route UPI QR payments through it automatically.
+
+<Frame caption="Screenshot: Razorpay → Payments → QR Codes">
+  _Screenshot placeholder — QR Codes list with Create QR Code button._
+</Frame>
+
+<Frame caption="Screenshot: Razorpay → Create QR Code dialog">
+  _Screenshot placeholder — Create QR Code form with default settings._
+</Frame>
+
+---
+
+## Verification
+
+Your Razorpay setup is complete when **all** of the following are true:
+
+- ✅ **API Keys** have been generated and stored securely.
+- ✅ **Webhook** has been added successfully in Razorpay.
+- ✅ All required webhook **event groups are enabled** (Payment, Order, Subscription, QR).
+- ✅ A **QR Code** has been created at least once on your Razorpay account.
+- ✅ Your **RabbitPay Dashboard can communicate successfully** with Razorpay (visible as a green **Connected** status in the RabbitPay integrations page).
+
+<Tip>
+  Once verified, run a small **₹1 test payment** through your storefront to confirm end-to-end connectivity before promoting the integration to full traffic.
+</Tip>
+
+---
+
+## Troubleshooting
+
+| Problem | Possible Cause | Solution |
+| --- | --- | --- |
+| **API Keys not visible** | Your Razorpay account is not fully activated, or your user role lacks the _Administrator_ permission. | Complete Razorpay KYC and ensure your user has admin rights. Refresh the API Keys page. |
+| **Webhook not receiving events** | Incorrect webhook URL, disabled events, or Razorpay account in test mode while RabbitPay expects live. | Re-check the URL is exactly `https://dashboard.rabbitpay.ai/api/razorpay/webhook`, ensure all four event groups are enabled, and confirm live mode is active. |
+| **Invalid Secret** | The webhook secret entered in Razorpay does not match the value RabbitPay expects. | Re-enter the secret exactly as `rabbit@321`. Do not add spaces or line breaks. |
+| **QR Code creation failed** | QR Codes are not yet enabled for your Razorpay merchant category, or KYC is incomplete. | Contact Razorpay Support to enable QR Codes on your account, then retry. |
+| **Permission denied** | You are logged in with a non-admin Razorpay user. | Ask your Razorpay account owner to grant you the _Administrator_ role, or have them complete the setup. |
+
+If a problem persists after trying the solutions above, email [support@rabbitpay.ai](mailto:support@rabbitpay.ai) with:
+
+- Your Razorpay **Key ID** (never share the Key Secret)
+- A screenshot of the Razorpay Webhooks page
+- The exact error message you are seeing
+
+---
+
+## Next steps
+
+With Razorpay configured, you're ready to continue your RabbitPay setup:
+
+<CardGroup cols={2}>
+  <Card title="Connect Razorpay to RabbitPay" icon="link" href="/integrations/shopify">
+    Paste your Razorpay Key ID and Key Secret into the RabbitPay Dashboard to complete the connection.
+  </Card>
+
+  <Card title="Test the payment flow" icon="vial" href="/product/checkout-flow">
+    Run a ₹1 test purchase end-to-end and verify webhooks arrive in real time.
+  </Card>
+
+  <Card title="Configure payment rules" icon="sliders" href="/integrations/cod-management">
+    Set COD, partial payment, and risk rules for your storefront.
+  </Card>
+
+  <Card title="Go live" icon="rocket" href="/getting-started/quick-start">
+    Switch your keys from test to live and enable RabbitPay on all products.
+  </Card>
+</CardGroup>

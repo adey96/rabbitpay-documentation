@@ -22,7 +22,8 @@
         "pages": [
           "integrations/shopify-integration",
           "integrations/partial-payments",
-          "integrations/cod-management"
+          "integrations/cod-management",
+          "integrations/razorpay-setup"
         ]
       },
       {
