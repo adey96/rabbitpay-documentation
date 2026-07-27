@@ -4,6 +4,78 @@ description: "Enable Razorpay QR functionality for UPI QR payments through Rabbi
 icon: "qrcode"
 ---
 
+## Overview
+
+RabbitPay supports QR-based payments through Razorpay. Before merchants can accept QR payments at checkout, they must create a QR Code inside their Razorpay account. This is a **one-time setup** required during the RabbitPay onboarding process.
+
 <Note>
-  Content coming soon.
+  RabbitPay does not require the downloaded QR image. Creating the QR Code in Razorpay is what enables QR payment functionality on the merchant's Razorpay account — the image itself does not need to be uploaded anywhere.
 </Note>
+
+## Navigation
+
+Follow this path inside the Razorpay Dashboard to reach the QR Codes section:
+
+```text
+Razorpay Dashboard
+      ↓
+Payments
+      ↓
+QR Codes
+```
+
+## Step 1: Open the QR Codes Section
+
+1. Log in to the [Razorpay Dashboard](https://dashboard.razorpay.com/).
+2. In the left navigation menu, look for **QR Codes** under **Payment Products**.
+3. If **QR Codes** is not visible, click **\+10 More** (or **Show More**) at the bottom of the Payment Products list to expand additional options.
+4. Select **QR Codes** from the expanded list.
+
+<Tip>
+  The **\+10 More** option only appears when some payment products are hidden. Once expanded, QR Codes will remain visible in your sidebar for future visits.
+</Tip>
+
+<Frame caption="Figure 1: Navigate to Payments → QR Codes from the Razorpay Dashboard.">
+  ![Razorpay Dashboard showing the \+10 More option in the left navigation](/images/razorpay/qr-more.png)
+</Frame>
+
+## Step 2: Create a New QR Code
+
+1. On the **QR Codes** page, click **\+ Create QR Codes** in the top-right corner.
+2. The **Create QR Code** dialog will open.
+3. **Keep all default settings unchanged**:
+   - **QR Usage** — Multiple Payments
+   - **Accept only fixed amount on this QR?** — No
+   - **Description** — leave blank
+4. Click **Create QR Code** to confirm.
+
+<Warning>
+  Do not modify any configuration in the Create QR Code dialog unless specifically instructed by the RabbitPay team. Changing these defaults may prevent QR payments from working correctly on your storefront.
+</Warning>
+
+<Frame caption="Figure 2: Create a new QR Code using the default Razorpay settings.">
+  ![Razorpay Create QR Code dialog with default settings selected](/images/razorpay/qr-create-dialog.png)
+</Frame>
+
+## Step 3: Download the QR Code
+
+Once the QR Code has been created successfully:
+
+1. Locate the newly created QR Code at the top of the **QR Codes** list.
+2. Click the download icon next to the entry to download the QR image.
+
+<Note>
+  The downloaded QR image is **not required by RabbitPay** and does not need to be uploaded anywhere. Simply creating the QR Code is sufficient to enable QR payment functionality on the merchant's Razorpay account.
+</Note>
+
+## Verification
+
+Your QR Code setup is complete when:
+
+- The QR Code has been created successfully in the Razorpay Dashboard.
+- The new QR Code appears in the **QR Codes** list with an **Active** status.
+- QR payment functionality is now enabled for your Razorpay account and ready to be used by RabbitPay at checkout.
+
+<Tip>
+  Once verified, you can continue with the remaining RabbitPay onboarding steps. No further action is required for QR payments.
+</Tip>

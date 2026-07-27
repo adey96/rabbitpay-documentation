@@ -31,6 +31,13 @@
               "integrations/razorpay/configure-webhook",
               "integrations/razorpay/generate-qr-code"
             ]
+          },
+          {
+            "group": "Meta Pixel Integration",
+            "icon": "meta",
+            "pages": [
+              "integrations/meta-pixel/generate-access-token"
+            ]
           }
         ]
       },
