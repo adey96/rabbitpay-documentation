@@ -6,120 +6,185 @@ icon: "meta"
 
 ## Overview
 
-RabbitPay supports **Meta Pixel** integration for tracking customer events and improving conversion reporting through the [Meta Conversions API](https://developers.facebook.com/docs/marketing-api/conversions-api). Server-side events sent from RabbitPay to Meta help merchants recover attribution lost to browser restrictions and ad blockers, resulting in more accurate campaign performance data.
+RabbitPay requires the merchant's **Meta Dataset/Pixel ID** and **Meta Conversions API Access Token** to configure the Meta integration for server-side event tracking.
 
-Before connecting Meta Pixel with RabbitPay, merchants must generate two credentials from their Meta account:
+There are two ways to identify the connected dataset:
 
-- **Meta Pixel ID** — identifies the Pixel that will receive events.
-- **Meta Pixel Access Token** — authenticates server-side event requests sent from RabbitPay to Meta.
+- **Through Shopify** — if Facebook & Instagram is already connected to the Shopify store, the connected dataset and its ID are visible directly inside Shopify Admin.
+- **Through Meta Events Manager** — the dataset can also be accessed directly at [eventsmanager.facebook.com](https://eventsmanager.facebook.com/).
+
+The **Access Token** itself is always generated from **Meta Events Manager**, under the selected Dataset's settings.
 
 <Note>
-  This setup is required **only once** during the RabbitPay onboarding process. Once configured, RabbitPay will automatically send purchase, checkout, and other conversion events to Meta on the merchant's behalf.
+  This setup is a one-time step during RabbitPay onboarding. Once the Dataset/Pixel ID and Access Token are configured, RabbitPay will automatically forward purchase, checkout, and other conversion events to Meta on the merchant's behalf.
 </Note>
 
 ## Prerequisites
 
-Before starting, ensure that:
+Before starting, the merchant should have:
 
-- The merchant has an active **Meta Business Account**.
-- A **Meta Pixel** has already been created in Events Manager.
-- The merchant has **Administrator** access to Meta Business Manager.
-- The merchant has access to **Meta Events Manager**.
+- Access to their **Shopify Admin**.
+- **Facebook & Instagram** connected to Shopify, if using the Shopify method.
+- Access to the correct **Meta Business account**.
+- Permission to access the required **Dataset** in Meta Events Manager.
 
-## Navigation
+## Step 1: Find the Dataset / Pixel ID through Shopify
 
-Follow this path inside Meta Business Suite to reach the Conversions API settings:
+Use this path inside Shopify Admin to locate the connected Meta Dataset:
 
 ```text
-Meta Business Suite
+Shopify Admin
       ↓
-Events Manager
-      ↓
-Select Pixel
+Facebook & Instagram
       ↓
 Settings
       ↓
-Conversions API
+Share data
+      ↓
+Behavior will be tracked with this dataset
 ```
 
-## Step 1: Open Meta Events Manager
+<Steps>
+  <Step title="Log in to Shopify Admin">
+    Sign in to the merchant's Shopify store as an administrator.
+  </Step>
+  <Step title="Open Facebook & Instagram">
+    From the **Sales channels** section in the left sidebar, click **Facebook & Instagram**.
+  </Step>
+  <Step title="Open Facebook & Instagram settings">
+    Inside the Facebook & Instagram channel, open the **Settings** page.
+  </Step>
+  <Step title="Locate the Share data section">
+    Scroll down until you find the **Share data** section.
+  </Step>
+  <Step title="Identify the connected Meta Dataset">
+    Under **Behavior will be tracked with this dataset**, identify the connected Meta Dataset.
+  </Step>
+  <Step title="Note the Dataset / Pixel ID">
+    Copy the Dataset/Pixel ID displayed just below the dataset name. This is the ID required for RabbitPay configuration.
+  </Step>
+</Steps>
 
-1. Log in to [Meta Business Suite](https://business.facebook.com/).
-2. From the left navigation menu, open **Events Manager**.
-3. Select the **Meta Pixel** that you want to integrate with RabbitPay.
-
-<Frame caption="Figure 1: Meta Events Manager dashboard with the target Pixel selected.">
-  ![Meta Events Manager dashboard showing the list of Pixels](/images/meta-pixel/events-manager.png)
+<Frame caption="Figure 1: Locate the connected Meta Dataset and Dataset/Pixel ID from the Facebook & Instagram settings in Shopify.">
+  ![Shopify Admin Facebook and Instagram settings showing the connected Meta Dataset and Dataset ID under the Share data section](/images/meta-pixel/shopify-dataset.png)
 </Frame>
+
+<Note>
+  For security and privacy, never expose the complete Dataset/Pixel ID in public documentation screenshots. Mask at least one or two digits of the ID before publishing.
+</Note>
+
+### Alternative — access the Dataset directly
+
+The merchant can also access the required dataset directly through **Meta Events Manager** at [eventsmanager.facebook.com](https://eventsmanager.facebook.com/).
+
+```text
+Meta Events Manager
+      ↓
+Datasets
+      ↓
+Select the required Dataset
+      ↓
+Settings
+```
 
 <Tip>
-  Verify that the selected Pixel belongs to the correct Meta Business Account before generating the Access Token. Using the wrong Pixel may result in incorrect conversion tracking on your storefront.
+  Make sure the selected Dataset corresponds to the correct Shopify store or business before proceeding. Using the wrong Dataset will result in events being reported against the incorrect Pixel.
 </Tip>
 
-## Step 2: Open Pixel Settings
+## Step 2: Open Dataset Settings
 
-1. After selecting the Pixel, open the **Settings** tab from the top navigation.
-2. Scroll down until you find the **Conversions API** section.
+<Steps>
+  <Step title="Open Meta Events Manager">
+    Go to [eventsmanager.facebook.com](https://eventsmanager.facebook.com/) and sign in with an account that has access to the correct Meta Business.
+  </Step>
+  <Step title="Select Datasets">
+    From the left navigation, select **Datasets**.
+  </Step>
+  <Step title="Select the Dataset associated with the merchant/store">
+    Choose the Dataset that matches the ID identified in Step 1.
+  </Step>
+  <Step title="Open the Settings tab">
+    Open the **Settings** tab from the top navigation of the Dataset detail page.
+  </Step>
+  <Step title="Locate the Set up direct integration section">
+    Scroll down until the **Set up direct integration** section is visible.
+  </Step>
+</Steps>
 
-This section allows merchants to generate an Access Token for server-side event tracking. Events sent through this API are attributed to the same Pixel that handles browser-side events, giving you a unified view of conversions.
+Navigation summary:
 
-<Frame caption="Figure 2: Pixel Settings page showing the Conversions API section.">
-  ![Meta Pixel Settings page with the Conversions API section visible](/images/meta-pixel/conversions-api-section.png)
-</Frame>
+```text
+Meta Events Manager
+      ↓
+Datasets
+      ↓
+Select Dataset
+      ↓
+Settings
+      ↓
+Set up direct integration
+```
 
 ## Step 3: Generate the Access Token
 
-1. Under the **Conversions API** section, click **Generate Access Token**.
-2. Meta will generate a new Access Token and display it once on screen.
-3. **Copy the generated Access Token immediately.**
-4. Store the token securely — it will be required during RabbitPay onboarding.
+Inside the **Set up direct integration** section:
 
-The Access Token authenticates every request sent from RabbitPay to Meta using the Conversions API. A sample token looks like this:
+<Steps>
+  <Step title="Review direct integration options">
+    Review the direct integration options shown by Meta, including the recommended **Set up with Dataset Quality API** option.
+  </Step>
+  <Step title="Locate the Generate access token button">
+    Find the **Generate access token** button under the direct integration options.
+  </Step>
+  <Step title="Click Generate access token">
+    Click **Generate access token**. Meta will generate a new Conversions API Access Token and display it on screen.
+  </Step>
+  <Step title="Copy the generated Access Token">
+    Copy the Access Token immediately from the dialog.
+  </Step>
+  <Step title="Store the Access Token securely">
+    Store the token in a secure password manager or credentials vault. It will be required during RabbitPay configuration.
+  </Step>
+</Steps>
 
-```text Access Token (example)
-EAAG5x8x0abcXYZ123...ZDZD
-```
+<Frame caption="Figure 2: Generate the Conversions API Access Token from the Dataset Settings page in Meta Events Manager.">
+  ![Meta Events Manager Dataset Settings page showing the Set up direct integration section and the Generate access token button](/images/meta-pixel/generate-access-token.png)
+</Frame>
 
 <Warning>
-  Meta displays the Access Token **only once** at the time of generation. If you navigate away without copying it, you will need to generate a new token. Save it to a secure password manager before closing the dialog.
+  The generated Access Token is a sensitive credential. Never expose it in screenshots, public documentation, frontend code, GitHub repositories, or public messages. If a token is accidentally exposed, generate a new one from Meta Events Manager immediately.
 </Warning>
 
-<Frame caption="Figure 3: Generate Access Token dialog under Conversions API.">
-  ![Meta Conversions API Generate Access Token dialog](/images/meta-pixel/generate-access-token.png)
-</Frame>
+## Step 4: Collect the Required Credentials
 
-## Step 4: Copy the Pixel ID
+After completing the previous steps, the merchant should have both of the following credentials ready:
 
-1. Locate the **Pixel ID** displayed at the top of the Pixel details page, next to the Pixel name.
-2. Click the Pixel ID to copy it to your clipboard.
-3. Store the Pixel ID securely alongside the Access Token.
+1. **Meta Dataset / Pixel ID** — identified from Shopify or Meta Events Manager in Step 1.
+2. **Meta Conversions API Access Token** — generated from Meta Events Manager in Step 3.
 
-RabbitPay requires **both** the Pixel ID and the Access Token to complete the Meta Pixel integration. A Pixel ID is a 15–16 digit numeric string, for example:
-
-```text Pixel ID (example)
-123456789012345
-```
-
-<Frame caption="Figure 4: Pixel details page showing the Pixel ID.">
-  ![Meta Pixel details page with the Pixel ID highlighted](/images/meta-pixel/pixel-id.png)
-</Frame>
+These credentials are required to configure the **Meta integration with RabbitPay**. Keep both values available when you begin the Meta configuration step during RabbitPay onboarding.
 
 ## Verification
 
-Your Meta Pixel setup is complete when:
+Before configuring RabbitPay, confirm that:
 
-- The **Pixel ID** has been copied successfully.
-- The **Access Token** has been generated and copied successfully.
-- Both credentials are stored securely and ready to be configured in RabbitPay.
+- The correct **Meta Dataset** has been selected.
+- The **Dataset/Pixel ID** has been identified.
+- The **Conversions API Access Token** has been generated.
+- The Access Token has been **copied and stored securely**.
+- Both credentials are **ready for RabbitPay configuration**.
 
 ## Security Notes
 
 <Note>
-  Keep the Access Token secure. Never expose it publicly or include it in frontend code or public repositories. If the Access Token is compromised, generate a new one from Meta Events Manager and update it in RabbitPay immediately.
+  - Never expose the Meta Access Token publicly.
+  - Mask one or two digits of the Dataset/Pixel ID in documentation screenshots.
+  - Confirm that the selected Dataset belongs to the correct merchant before configuring RabbitPay.
+  - Do not include real Access Tokens in examples, tutorials, or support tickets.
 </Note>
 
 <Warning>
-  Do not delete or regenerate the Access Token after it has been configured in RabbitPay **unless you also update the new token within RabbitPay**. An invalid or expired token will prevent server-side events from being sent to Meta, resulting in gaps in conversion tracking.
+  If the Access Token is compromised, generate a new one from Meta Events Manager and update it in RabbitPay immediately. An invalid or replaced token will prevent server-side events from being delivered to Meta, resulting in gaps in conversion tracking.
 </Warning>
 
 ## Next Steps
