@@ -97,7 +97,7 @@
     "strict": true
   },
   "background": {
-    "decoration": "gradient"
+    "decoration": "none"
   },
   "search": {
     "prompt": "Search RabbitPay docs..."
