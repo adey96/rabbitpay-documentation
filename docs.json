@@ -8,60 +8,91 @@
     "dark": "#0B4FC2"
   },
   "navigation": {
-    "groups": [
+    "tabs": [
       {
-        "group": "Getting Started",
-        "pages": [
-          "getting-started/introduction",
-          "getting-started/quick-start",
-          "getting-started/installation"
-        ]
-      },
-      {
-        "group": "Integrations",
-        "pages": [
-          "integrations/shopify-integration",
-          "integrations/partial-payments",
-          "integrations/cod-management",
+        "tab": "Documentation",
+        "groups": [
           {
-            "group": "Razorpay Integration",
-            "icon": "credit-card",
+            "group": "Getting Started",
             "pages": [
-              "integrations/razorpay/generate-api-token",
-              "integrations/razorpay/configure-webhook",
-              "integrations/razorpay/generate-qr-code"
+              "getting-started/introduction",
+              "getting-started/quick-start",
+              "getting-started/installation"
             ]
           },
           {
-            "group": "Meta Pixel Integration",
-            "icon": "meta",
+            "group": "Integrations",
             "pages": [
-              "integrations/meta-pixel/generate-access-token"
+              "integrations/shopify-integration",
+              "integrations/partial-payments",
+              "integrations/cod-management",
+              {
+                "group": "Razorpay Integration",
+                "icon": "credit-card",
+                "pages": [
+                  "integrations/razorpay/generate-api-token",
+                  "integrations/razorpay/configure-webhook",
+                  "integrations/razorpay/generate-qr-code"
+                ]
+              },
+              {
+                "group": "Meta Pixel Integration",
+                "icon": "meta",
+                "pages": [
+                  "integrations/meta-pixel/generate-access-token"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Product",
+            "pages": [
+              "product/checkout-flow",
+              "product/order-management"
+            ]
+          },
+          {
+            "group": "Support",
+            "pages": [
+              "support/faqs",
+              "support/contact-us"
             ]
           }
         ]
       },
       {
-        "group": "API",
-        "pages": [
-          "api/authentication",
-          "api/api-reference",
-          "api/webhooks"
+        "tab": "Dashboard Handbook",
+        "groups": [
+          {
+            "group": "Dashboard Handbook",
+            "pages": [
+              "dashboard-handbook/overview"
+            ]
+          }
         ]
       },
       {
-        "group": "Product",
-        "pages": [
-          "product/checkout-flow",
-          "product/order-management"
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API",
+            "pages": [
+              "api/authentication",
+              "api/api-reference",
+              "api/webhooks"
+            ]
+          }
         ]
       },
       {
-        "group": "Support",
-        "pages": [
-          "support/faqs",
-          "support/changelog",
-          "support/contact-us"
+        "tab": "Changelog",
+        "groups": [
+          {
+            "group": "Changelog",
+            "pages": [
+              "support/changelog"
+            ]
+          }
         ]
       }
     ]
