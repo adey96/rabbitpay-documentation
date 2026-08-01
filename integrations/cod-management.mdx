@@ -1,87 +1,196 @@
 ---
-title: "COD Management"
-description: "Reduce RTO with OTP verification, risk scoring, and COD rules."
+title: "How to Set Up COD Fees"
+description: "Configure Cash on Delivery (COD) fees to recover COD handling costs and reduce non-serious COD orders."
 icon: "money-bill-wave"
+sidebarTitle: "COD Fees"
 ---
 
-Cash on Delivery remains the dominant payment method in India — but it also drives **RTO (Return to Origin)** rates as high as 30–40%. RabbitPay's COD Management suite gives you the tools to keep COD available without eating margin.
+# How to Set Up COD Fees
 
-## What's included
+RabbitPay allows you to add an additional **Cash on Delivery (COD) fee** for eligible orders. You can configure a fixed COD fee, apply it to specific products, restrict it by cart value or delivery zipcode, and control when the fee appears during checkout.
+
+---
+
+## Before You Begin
+
+Make sure:
+
+- RabbitPay is installed and connected to your Shopify store.
+- You have access to the RabbitPay Dashboard.
+- COD payment is enabled for your store.
+
+---
+
+## Step 1: Open the RTO Suite
+
+1. Log in to your RabbitPay Dashboard.
+2. Navigate to **RTO Suite**.
+3. Click **Add Payment Rule**.
+
+<Frame>
+  ![Add Payment Rule](/images/add-payment-rule.png "Add Payment Rule")
+</Frame>
+
+---
+
+## Step 2: Create a COD Fee Rule
+
+Configure the following fields.
+
+### Rule Name
+
+Enter a descriptive name.
+
+**Example**
+
+- COD Fee
+- COD Charge
+- Cash on Delivery Fee
+
+### Amount Type
+
+Select **COD** from the dropdown.
+
+### Amount
+
+Enter the COD fee you want to charge.
+
+**Example**
+
+| Amount |
+| --- |
+| ₹49 |
+| ₹59 |
+| ₹99 |
+
+> **Note**
+>
+> If the **Amount** field is left blank or set to **0**, no additional COD fee will be charged.
+>
+> <Frame>
+>   ![Screenshot 2026 08 01 223249](/images/Screenshot-2026-08-01-223249.png "Screenshot 2026 08 01 223249")
+> </Frame>
+
+---
+
+## Step 3: Configure Optional Settings
+
+### Cart Range
+
+Limit the COD fee to specific order values.
+
+Example:
+
+- Minimum Cart Total: ₹500
+- Maximum Cart Total: ₹10,000
+
+The COD fee will only apply to orders within this range.
+
+---
+
+### Discount (Optional)
+
+You can optionally apply a Shopify discount code together with the COD rule if required.
+
+---
+
+### Applies To
+
+Choose where the COD fee should apply.
+
+- **All Products** – Apply the COD fee across your entire store.
+- **Only Selected** – Apply the COD fee only to selected products.
+- **All Except Selected** – Apply the COD fee to every product except the excluded products.
+
+This gives you complete flexibility to charge COD fees only for specific products or collections.
+
+---
+
+### COD Availability
+
+Enable **Show COD as disabled when blocked** if you want customers to see COD as unavailable instead of completely hiding the payment option.
+
+---
+
+### Zipcode Restrictions
+
+Enable **Zipcode Restrictions** to control where the COD fee rule is applied.
+
+You can:
+
+- Restrict specific zipcodes.
+- Restrict a range of zipcodes.
+- Apply the rule only to selected delivery locations.
+
+This is useful for high-RTO regions or locations with additional delivery charges.
+
+---
+
+### Rule Status
+
+Enable **Rule Enabled** to activate the rule.
+
+Click **Save Changes** once your configuration is complete.
+
+<Frame>
+  ![Screenshot 2026 08 01 223304 1](/images/Screenshot-2026-08-01-223304-1.png "Screenshot 2026 08 01 223304 1")
+</Frame>
+
+---
+
+## Customer Checkout Experience
+
+When customers choose **Cash on Delivery** during RabbitPay Checkout, the configured COD fee is automatically added to the order total.
+
+<Frame>
+  ![Partial Payment Checkout](/images/partial-payment-checkout.png "Partial Payment Checkout")
+</Frame>
+
+Example:
+
+| Order Total | ₹990 |
+| --- | --- |
+| COD Fee | ₹59 |
+| Customer Pays | ₹1,049 |
+
+---
+
+## Best Practices
 
 <CardGroup cols={2}>
-  <Card title="OTP verification" icon="shield-check">
-    Every COD order requires a mobile OTP before creation, filtering junk orders.
+  <Card title="Keep Fees Transparent">
+    Clearly communicate the COD fee during checkout to avoid customer confusion.
   </Card>
 
-  <Card title="Risk scoring" icon="gauge-high">
-    Shoppers are scored 0–100 based on history, device, and pincode. Block or downgrade high-risk sessions automatically.
+  <Card title="Use Cart Ranges">
+    Apply COD fees only for selected order values if required.
   </Card>
 
-  <Card title="COD rules engine" icon="sliders">
-    Disable COD by cart value, SKU, pincode, or shopper cohort.
+  <Card title="Target Specific Products">
+    Charge COD fees only for high-risk or high-value products.
   </Card>
 
-  <Card title="Reconciliation" icon="scale-balanced">
-    Match courier remittances to orders and flag shortfalls automatically.
+  <Card title="Use Zipcode Restrictions">
+    Apply COD fees only to regions with higher delivery or RTO risk.
   </Card>
 </CardGroup>
 
-## Create a COD rule
+---
 
-```bash
-curl https://api.rabbitpay.ai/v1/cod/rules \
-  -H "Authorization: Bearer sk_live_your_key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Block risky pincodes",
-    "action": "disable_cod",
-    "conditions": {
-      "pincodes": ["110001", "400001"],
-      "risk_score_gte": 70
-    }
-  }'
-```
+## Example Configuration
 
-## Risk scoring API
+| Setting | Value |
+| --- | --- |
+| Rule Name | COD Charge |
+| Amount Type | COD |
+| Amount | ₹59 |
+| Cart Range | ₹500 – ₹10,000 (Optional) |
+| Applies To | All Products |
+| Zipcode Restrictions | Enabled (Optional) |
+| Rule Status | Enabled |
 
-Call the risk API server-side before rendering payment options if you want custom UI treatment.
+---
 
-```javascript
-const risk = await rabbitpay.cod.risk.evaluate({
-  phone: '+919876543210',
-  pincode: '560001',
-  cart_value: 349900,
-});
+## Result
 
-// {
-//   score: 22,
-//   band: 'low',
-//   recommendation: 'allow_cod',
-//   reasons: ['returning_shopper', 'verified_pincode']
-// }
-```
-
-| Band | Score | Recommendation |
-| --- | --- | --- |
-| `low` | 0–39 | Allow COD |
-| `medium` | 40–69 | Prefer partial payment |
-| `high` | 70–100 | Disable COD |
-
-## Reconciliation report
-
-Download monthly reconciliation reports from the dashboard or via API.
-
-```bash
-curl https://api.rabbitpay.ai/v1/cod/reconciliation?month=2026-06 \
-  -H "Authorization: Bearer sk_live_your_key"
-```
-
-The report matches each COD order to a courier remittance and flags:
-
-- **Short remit** — courier remitted less than the COD amount
-- **Missing remit** — COD amount never remitted
-- **Duplicate remit** — same order remitted twice
-
-<Tip>
-  Enable the **Auto-dispute** setting in the dashboard to file shortfalls with your logistics provider automatically.
-</Tip>
+Customers selecting **Cash on Delivery** during RabbitPay Checkout will automatically see the configured COD fee added to their payable amount. The rule can be limited by cart value, specific products, or selected zipcodes, giving you complete control over when COD fees are applied.
