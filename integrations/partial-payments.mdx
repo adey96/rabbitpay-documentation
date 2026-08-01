@@ -1,105 +1,305 @@
 ---
-title: "Partial Payments"
-description: "Let shoppers pay part of the order upfront and the rest on delivery."
+title: "How to Set Up Partial Payment in RabbitPay"
+description: "Learn how to configure partial payment rules in RabbitPay to collect an upfront payment for Cash on Delivery (COD) orders."
 icon: "coins"
+sidebarTitle: "Partial Payment"
 ---
 
-Partial payments let shoppers **prepay a portion** of the order (typically 10–30%) and pay the remainder as **COD** at delivery. This dramatically reduces RTO on high-ticket orders while keeping the checkout friction low.
+# How to Set Up Partial Payment in RabbitPay
 
-## How it works
+Collect an advance payment for Cash on Delivery (COD) orders to reduce Return-to-Origin (RTO) losses and improve order commitment. RabbitPay allows you to configure flexible partial payment rules based on percentage or fixed amount.
 
-<Steps>
-  <Step title="Merchant defines the rule">
-    In the RabbitPay Dashboard, set the partial percentage or a flat prepaid amount. Rules can be scoped by SKU, collection, cart value, or customer segment.
-  </Step>
-  <Step title="Shopper picks partial">
-    At checkout, the shopper sees three tiles: **Prepaid**, **Partial**, **COD**. Selecting Partial shows the exact split.
-  </Step>
-  <Step title="RabbitPay collects prepaid amount">
-    The prepaid portion is captured via UPI, cards, or wallets. On success, the order is created in Shopify with the partial tag.
-  </Step>
-  <Step title="COD collected at delivery">
-    Your logistics provider collects the balance. RabbitPay reconciles the COD remittance against the original session.
-  </Step>
-</Steps>
+---
 
-## Configuring rules
+## Before You Begin
 
-<CodeGroup>
+Make sure:
 
-```bash cURL
-curl https://api.rabbitpay.ai/v1/partial_payments/rules \
-  -H "Authorization: Bearer sk_live_your_key" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "High-ticket electronics",
-    "conditions": {
-      "cart_value_min": 500000,
-      "collections": ["electronics"]
-    },
-    "split": {
-      "type": "percentage",
-      "prepaid_percent": 20
-    },
-    "enabled": true
-  }'
+- RabbitPay is installed and connected to your Shopify store.
+- You have access to the RabbitPay Dashboard.
+- Your checkout is already configured with RabbitPay.
+
+---
+
+## Step 1: Open the RTO Suite
+
+1. Log in to your RabbitPay Dashboard.
+2. From the left sidebar, click **RTO Suite**.
+3. You'll see the **Payment Rules** page where all your payment rules are listed.
+
+> **Note:** Payment rules are evaluated from top to bottom. If multiple rules match an order, the first matching rule will be applied.
+
+---
+
+## Step 2: Create a New Payment Rule
+
+Click the **Add payment rule** button in the top-right corner.
+
+This opens the payment rule configuration page where you can define how much customers need to pay upfront.
+
+<Frame>
+  ![Add Payment Rule](/images/rto-suite/add-payment-rule.png "Add Payment Rule")
+</Frame>
+
+---
+
+# Configure the Payment Rule
+
+Complete the following sections based on your business requirements.
+
+---
+
+## Rule Details
+
+### Rule Name
+
+Enter a meaningful name for your rule.
+
+**Example**
+
+- Part Payment
+- Reserve Your Order
+- 25% Advance
+- Booking Amount
+
+---
+
+## Amount
+
+Choose how the customer should pay upfront.
+
+### Amount Type
+
+You can choose between:
+
+- **Percentage** – Collect a percentage of the order value.
+- **Fixed Amount** – Collect a fixed amount regardless of cart value.
+
+### Amount
+
+Enter the value.
+
+**Example**
+
+| Amount Type | Value | Customer Pays |
+| --- | --- | --- |
+| Percentage | 25 | 25% of the order value |
+| Fixed Amount | 199 | ₹199 upfront |
+
+---
+
+## Cart Range (Optional)
+
+Limit the rule to specific cart values.
+
+| Field | Description |
+| --- | --- |
+| Minimum Cart Total | Minimum order amount required |
+| Maximum Cart Total | Maximum order amount eligible |
+
+**Example**
+
+| Minimum | Maximum |
+| --- | --- |
+| ₹500 | ₹10,000 |
+
+The rule will only apply to orders within this range.
+
+---
+
+## Partial COD Fee (Optional)
+
+Enable **Include COD fee on delivery** if you want to charge an additional COD fee when the customer pays the remaining amount upon delivery.
+
+This is useful if you want to:
+
+- Recover COD handling costs.
+- Encourage prepaid payments.
+- Reduce non-serious COD orders.
+
+---
+
+## Discount (Optional)
+
+Reward customers for paying partially online.
+
+### Discount Code
+
+Enter the Shopify discount code.
+
+Example:
+
+```text
+PREPAID10
 ```
 
-```javascript Node.js
-await rabbitpay.partialPayments.rules.create({
-  name: 'High-ticket electronics',
-  conditions: {
-    cart_value_min: 500000,
-    collections: ['electronics'],
-  },
-  split: { type: 'percentage', prepaid_percent: 20 },
-  enabled: true,
-});
-```
+### Discount Type
 
-</CodeGroup>
+Choose one:
 
-## Response object
+- Fixed Amount
+- Percentage
 
-```json
-{
-  "id": "pprule_01H8Z...",
-  "object": "partial_payment_rule",
-  "name": "High-ticket electronics",
-  "conditions": {
-    "cart_value_min": 500000,
-    "collections": ["electronics"]
-  },
-  "split": {
-    "type": "percentage",
-    "prepaid_percent": 20
-  },
-  "enabled": true,
-  "created_at": 1729353600
-}
-```
+### Discount Value
 
-## Session output
+Enter the discount amount.
 
-When a shopper picks Partial, the resulting checkout session looks like:
+Examples:
 
-```json
-{
-  "id": "cs_live_9xY...",
-  "amount": 699900,
-  "payment_method": "partial",
-  "amount_prepaid": 139980,
-  "amount_cod": 559920,
-  "status": "completed"
-}
-```
+- ₹50
+- 10%
 
-<Warning>
-  Refunds on partial orders are capped at the **prepaid amount**. COD balances cannot be refunded via RabbitPay — handle them manually if the shopper cancels before delivery.
-</Warning>
+Customers who choose the partial payment option will receive this discount during checkout.
 
-## Best practices
+---
 
-- Start with **20% prepaid** on orders above ₹5,000 to measure RTO impact.
-- Combine with the **Risk API** to auto-disable partial for high-risk shoppers.
-- Show the split clearly on the order confirmation page.
+## Applies To
+
+Choose where this payment rule should apply.
+
+### All Products
+
+Applies to every product in your store.
+
+Recommended if you want partial payment on all COD orders.
+
+---
+
+### Only Selected
+
+Apply the rule only to selected products.
+
+Ideal for:
+
+- High-value items
+- Limited edition products
+- Custom products
+
+---
+
+### All Except Selected
+
+Apply the rule to every product except the products you exclude.
+
+Useful if only a few products should remain eligible for normal COD.
+
+---
+
+## Zipcode Restrictions (Optional)
+
+Restrict the payment rule based on delivery pincodes.
+
+You can:
+
+- Include selected pincodes
+- Exclude selected pincodes
+
+This is useful if certain locations have higher RTO rates.
+
+---
+
+## Customer Restrictions (Optional)
+
+Choose whether the rule should apply to:
+
+- New customers
+- Returning customers
+- All customers
+
+---
+
+## Save the Rule
+
+After configuring all required fields:
+
+1. Review your settings.
+2. Click **Save Changes**.
+3. Your payment rule will now appear in the Payment Rules list.
+
+<Frame>
+  ![Edit Payment Rule](/images/rto-suite/edit-payment-rule.png "Edit Payment Rule")
+</Frame>
+
+---
+
+# How It Works at Checkout
+
+When a customer reaches RabbitPay Checkout:
+
+- They will see the **Part Payment** option.
+- The checkout displays:
+  - Amount payable now
+  - Remaining COD amount
+  - Any applicable discount
+  - COD fee (if enabled)
+
+Example:
+
+- Order Total: ₹990
+- Partial Payment: 25%
+- Customer Pays Now: ₹247.50
+- Remaining COD Amount: ₹742.50
+
+<Frame>
+  ![Partial Payment Checkout](/images/rto-suite/partial-payment-checkout.png "Partial Payment Checkout")
+</Frame>
+
+---
+
+# Best Practices
+
+<CardGroup cols={2}>
+  <Card title="Use Cart Ranges">
+    Create different partial payment percentages for different order values.
+  </Card>
+
+  <Card title="Offer Discounts">
+    Encourage customers to choose partial payment by providing prepaid discounts.
+  </Card>
+
+  <Card title="Charge COD Fees">
+    Add a COD fee for customers who still prefer paying on delivery.
+  </Card>
+
+  <Card title="Test Before Going Live">
+    Place a test order to verify the checkout experience before enabling the rule for customers.
+  </Card>
+</CardGroup>
+
+---
+
+# Example Configuration
+
+| Setting | Value |
+| --- | --- |
+| Rule Name | Part Payment |
+| Amount Type | Percentage |
+| Amount | 25% |
+| Cart Range | ₹500 – ₹10,000 |
+| Discount | PREPAID10 |
+| Discount Type | Fixed Amount |
+| Discount Value | ₹50 |
+| Applies To | All Products |
+| COD Fee | Disabled |
+
+---
+
+# Result
+
+Customers placing eligible COD orders will:
+
+- Pay 25% upfront.
+- Receive any configured discount.
+- Pay the remaining amount upon delivery.
+- Experience a smooth RabbitPay checkout while helping reduce RTO risk for your business.
+
+---
+
+## Next Steps
+
+After configuring Partial Payment, you may also want to:
+
+- Set up COD Fees
+- Configure Prepaid Discounts
+- Configure Cart Value-Based Discounts
+- Customize Your RabbitPay Checkout
