@@ -1,0 +1,6 @@
+#navbar img,
+nav img[alt*="logo" i] {
+  height: 44px !important;
+  max-height: none !important;
+  width: auto !important;
+}
