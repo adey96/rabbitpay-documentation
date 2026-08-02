@@ -120,7 +120,7 @@
   },
   "description": "Developer documentation for RabbitPay — the 1-Click Checkout platform for Shopify merchants.",
   "logo": {
-    "light": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-logo.svg?v=1784533882",
+    "light": "/images/rabbitpay-logo@3x.png",
     "dark": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-white-logo-no-bg.svg?v=1784539339"
   },
   "favicon": "https://cdn.shopify.com/s/files/1/1000/8018/9762/files/rabbitpay-icon-black.svg?v=1784533881",
