@@ -26,6 +26,7 @@
               "integrations/shopify-integration",
               "integrations/partial-payments",
               "integrations/cod-management",
+              "untitled-page",
               {
                 "group": "Razorpay Integration",
                 "icon": "credit-card",
@@ -41,8 +42,7 @@
                 "pages": [
                   "integrations/meta-pixel/generate-access-token"
                 ]
-              },
-              "untitled-page"
+              }
             ]
           },
           {
