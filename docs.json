@@ -26,7 +26,7 @@
               "integrations/shopify-integration",
               "integrations/partial-payments",
               "integrations/cod-management",
-              "untitled-page",
+              "integrations/prepaid-discount",
               {
                 "group": "Razorpay Integration",
                 "icon": "credit-card",
