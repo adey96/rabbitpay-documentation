@@ -1,6 +1,6 @@
 ---
 title: "How to Set Up Partial Payment"
-description: "Use Partial Payment to collect a fixed amount or percentage of the order value before dispatching a COD order. This helps improve order commitment while allowing customers to pay the remaining amount upon delivery."
+description: "Configure Partial Payment to collect a fixed amount or percentage of the order value before dispatching a COD order."
 icon: "coins"
 sidebarTitle: "Partial Payment"
 ---
@@ -8,42 +8,59 @@ sidebarTitle: "Partial Payment"
 ## Step 1: Open RTO Suite
 
 1. Log in to your RabbitPay Dashboard.
-2. Go to **RTO Suite**.
+2. Navigate to **RTO Suite**.
 3. Click **Add payment rule**.
-4. <Frame>
-     ![Add Paymenr Rule](/images/add-paymenr-rule.png "Add Paymenr Rule")
-   </Frame>
+
+<Frame>
+  ![Add Paymenr Rule 1](/images/add-paymenr-rule-1.png "Add Paymenr Rule 1")
+</Frame>
 
 ---
 
 ## Step 2: Configure the Rule
 
-Fill in the following details:
+Fill in the required details.
 
 | Field | Value |
 | --- | --- |
 | Rule Name | **Part Payment** _(Recommended)_ |
-| Other Examples | Reserve Your Order,<br />Book Now,<br />25% Advance |
+| Other Examples | Reserve Your Order, Book Now, 25% Advance |
 | Amount Type | Percentage or Fixed Amount |
 | Amount | Enter the upfront payment amount to collect |
 
+### Example 1: Percentage
+
+Select **Percentage** if you want customers to pay a percentage of the total order value upfront.
+
 <Frame>
-  ![Edit Payment Rule](/images/edit-payment-rule.png "Edit Payment Rule")
+  ![Edit Payment Rule 1](/images/edit-payment-rule-1.png "Edit Payment Rule 1")
 </Frame>
 
-> **Tip:** Use a clear rule name that customers will see during checkout.
+<Note>
+  Use a customer-friendly rule name, as it will be displayed to customers during checkout.
+</Note>
+
+### Example 2: Fixed Amount
+
+Select **Fixed Amount** if you want to collect the same upfront payment for every eligible order, regardless of the order value.
+
+For example, entering **₹200** means every eligible customer will pay **₹200 upfront**, and the remaining balance will be collected on delivery.
+
+<Frame>
+  ![Screenshot 2026 08 03 123144](/images/Screenshot-2026-08-03-123144.png "Screenshot 2026 08 03 123144")
+</Frame>
 
 ---
 
 ## Step 3: Configure Optional Settings
 
-If required, configure:
+Configure the following settings as needed:
 
-- **Cart Range** – Apply the rule only for selected order values.
-- **Partial COD Fee** – Charge a COD fee on the remaining amount.
-- **Discount** – Apply a Shopify discount code.
-- **Applies To** – All products, selected products, or all except selected.
-- **Zipcode Restrictions** – Restrict the rule to specific zipcodes.
+- **Cart Range** – Apply the rule only to selected order values.
+- **Partial COD Fee** – Add a COD fee to the remaining amount payable on delivery.
+- **Discount** – Apply a Shopify discount code to this payment rule.
+- **Applies To** – Choose whether the rule applies to all products, selected products, or all except selected.
+- **Zipcode Restrictions** – Restrict the rule to specific delivery zipcodes.
 
 ---
 
@@ -53,17 +70,35 @@ If required, configure:
 2. Click **Save Changes**.
 
 <Frame>
-  ![Screenshot 2026 08 01 223304 2](/images/Screenshot-2026-08-01-223304-2.png "Screenshot 2026 08 01 223304 2")
+  ![Screenshot 2026 08 01 223304 3](/images/Screenshot-2026-08-01-223304-3.png "Screenshot 2026 08 01 223304 3")
 </Frame>
 
 ---
 
 ## Checkout Preview
 
-Customers will see the **Part Payment** option during checkout.
+Customers will see the configured Partial Payment option during checkout.
+
+### Percentage Example
+
+Customers pay the configured percentage upfront and the remaining amount on delivery.
 
 <Frame>
-  ![Checkout](/images/rto-suite/partial-payment-checkout.png)
+  ![Partial Payment Checkout Annotated](/images/partial-payment-checkout-annotated.png "Partial Payment Checkout Annotated")
+</Frame>
+
+### Fixed Amount Example
+
+If the rule is configured with a **Fixed Amount**, customers will see the configured amount displayed during checkout.
+
+Example:
+
+- Rule Name: **Reserve Your Order**
+- Upfront Payment: **₹200**
+- Remaining Amount: **₹750 on delivery**
+
+<Frame>
+  ![FIXED PAYMENT CHECKOUT Annotated](/images/FIXED-PAYMENT-CHECKOUT-annotated.png "FIXED PAYMENT CHECKOUT Annotated")
 </Frame>
 
 ---
@@ -75,9 +110,11 @@ Customers will see the **Part Payment** option during checkout.
 | Rule Name | Part Payment |
 | Amount Type | Percentage |
 | Amount | 25% |
-| Cart Range | ₹500 – ₹10,000 (Optional) |
+| Cart Range | ₹500 – ₹10,000 _(Optional)_ |
 | Applies To | All Products |
+
+---
 
 ## Result
 
-Your partial payment rule is now active and will be applied to eligible orders based on the conditions you've configured.
+Your Partial Payment rule is now active and will be applied to eligible orders based on the conditions you've configured.
