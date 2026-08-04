@@ -25,7 +25,7 @@
             "pages": [
               "integrations/shopify-integration",
               "integrations/partial-payments",
-              "integrations/cod-fee-management",
+              "integrations/how-to-set-up-cod-fees",
               "integrations/prepaid-discount",
               {
                 "group": "Razorpay Integration",
