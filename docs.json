@@ -51,7 +51,8 @@
             "pages": [
               "product/checkout-flow",
               "product/order-management",
-              "product/otp-verification"
+              "product/otp-verification",
+              "product/convert-cod-to-prepaid"
             ]
           },
           {
