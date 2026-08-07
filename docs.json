@@ -43,7 +43,8 @@
                   "integrations/meta-pixel/generate-access-token"
                 ]
               },
-              "integrations/zipcode-restrictions"
+              "integrations/zipcode-restrictions",
+              "integrations/payment-rules-by-cart-value"
             ]
           },
           {
