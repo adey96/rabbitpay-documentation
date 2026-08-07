@@ -44,6 +44,7 @@
                 ]
               },
               "integrations/zipcode-restrictions",
+              "integrations/convert-cod-to-prepaid",
               "integrations/payment-rules-by-cart-value"
             ]
           },
@@ -52,8 +53,7 @@
             "pages": [
               "product/checkout-flow",
               "product/order-management",
-              "product/otp-verification",
-              "product/convert-cod-to-prepaid"
+              "product/otp-verification"
             ]
           },
           {
