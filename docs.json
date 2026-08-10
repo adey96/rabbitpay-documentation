@@ -45,7 +45,8 @@
               },
               "integrations/zipcode-restrictions",
               "integrations/convert-cod-to-prepaid",
-              "integrations/payment-rules-by-cart-value"
+              "integrations/payment-rules-by-cart-value",
+              "integrations/disable-cod-for-products"
             ]
           },
           {
