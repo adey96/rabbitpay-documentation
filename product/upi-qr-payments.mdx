@@ -1,0 +1,90 @@
+---
+title: "How to Accept UPI QR Code Payments in Shopify Checkout"
+description: "Accept UPI QR payments directly inside RabbitPay Checkout using your Razorpay QR Code without redirecting customers to a separate payment page."
+icon: "qrcode"
+sidebarTitle: "UPI QR Payments"
+---
+
+RabbitPay allows customers to pay through a **UPI QR Code directly inside the checkout popup**.
+
+Once your Razorpay QR Code is created, RabbitPay automatically displays it during checkout so customers can scan and pay without being redirected to a separate payment page.
+
+## Step 1: Create Your Razorpay QR Code
+
+If you already have a Razorpay QR Code, you can skip this step.
+
+If you don't have one yet, create it first using the guide below.
+
+<Card title="Don't have a Razorpay QR Code?" icon="qrcode">
+  Create your QR Code in Razorpay before continuing with this setup.
+
+  [**Generate Razorpay QR Code →**](https://docs.rabbitpay.ai/integrations/razorpay/generate-qr-code)
+</Card>
+
+<Note>
+  The QR Code only needs to be created once. After it is created in Razorpay, RabbitPay can use it for UPI QR payments at checkout.
+</Note>
+
+---
+
+## Step 2: Open RabbitPay Checkout
+
+After your Razorpay QR Code is created, open your Shopify store and launch **RabbitPay Checkout**.
+
+Customers will see **Pay via UPI** along with the other available payment methods.
+
+<Frame>
+  ![Screenshot 2026 08 11 193830](/images/Screenshot-2026-08-11-193830.png "Screenshot 2026 08 11 193830")
+</Frame>
+
+---
+
+## Step 3: Scan and Pay
+
+When the customer selects **Pay via UPI and click on Show QR**, RabbitPay displays the Razorpay QR Code directly inside the checkout popup.
+
+The customer can:
+
+1. Scan the QR Code using their UPI app.
+2. Confirm the payment.
+3. Complete the order without leaving RabbitPay Checkout.
+
+<Frame caption="UPI QR Code displayed directly inside RabbitPay Checkout.">
+  ![Screenshot 2026 08 11 193043 1](/images/Screenshot-2026-08-11-193043-1.png "Screenshot 2026 08 11 193043 1")
+</Frame>
+
+Customers can use supported UPI apps such as **Google Pay, PhonePe, Paytm, and CRED** to scan and complete the payment.
+
+---
+
+## Why Use UPI QR Payments?
+
+<CardGroup cols={2}>
+  <Card title="No Redirect">
+    Customers can scan and pay directly inside RabbitPay Checkout without opening a separate payment page.
+  </Card>
+
+  <Card title="Faster Payments">
+    Customers can quickly scan the QR Code and complete their UPI payment.
+  </Card>
+
+  <Card title="Easy UPI Experience">
+    Customers can use their preferred UPI app to make the payment.
+  </Card>
+
+  <Card title="Better Checkout Flow">
+    Keeping payment inside the checkout reduces extra steps and interruptions.
+  </Card>
+</CardGroup>
+
+---
+
+## Result
+
+Your Razorpay QR Code is now available directly inside **RabbitPay Checkout**.
+
+Customers can select **Pay via UPI**, scan the QR Code, and complete their payment without being redirected to a separate payment page.
+
+<Card title="Need to create a QR Code?" icon="qrcode">
+  [**Generate Razorpay QR Code →**](https://docs.rabbitpay.ai/integrations/razorpay/generate-qr-code)
+</Card>
