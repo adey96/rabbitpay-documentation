@@ -17,13 +17,14 @@
             "pages": [
               "getting-started/introduction",
               "getting-started/quick-start",
-              "getting-started/installation"
+              "getting-started/installation",
+              "getting-started/shopify-integration",
+              "untitled-page"
             ]
           },
           {
             "group": "Integrations",
             "pages": [
-              "integrations/shopify-integration",
               "integrations/partial-payments",
               "integrations/how-to-set-up-cod-fees",
               "integrations/prepaid-discount",
@@ -47,7 +48,8 @@
               "integrations/convert-cod-to-prepaid",
               "integrations/payment-rules-by-cart-value",
               "integrations/disable-cod-for-products",
-              "integrations/abandoned-cart-recovery"
+              "integrations/abandoned-cart-recovery",
+              "integrations/shopify/one-click-checkout"
             ]
           },
           {
