@@ -18,13 +18,13 @@
               "getting-started/introduction",
               "getting-started/quick-start",
               "getting-started/installation",
-              "getting-started/shopify-integration",
               "getting-started/one-click-checkout"
             ]
           },
           {
             "group": "Integrations",
             "pages": [
+              "integrations/shopify-integration",
               "integrations/partial-payments",
               "integrations/how-to-set-up-cod-fees",
               "integrations/prepaid-discount",
