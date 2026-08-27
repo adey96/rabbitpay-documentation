@@ -19,8 +19,7 @@
               "getting-started/quick-start",
               "getting-started/installation",
               "getting-started/shopify-integration",
-              "getting-started/one-click-checkout",
-              "getting-started/add-gst-in"
+              "getting-started/one-click-checkout"
             ]
           },
           {
@@ -82,10 +81,11 @@
           {
             "group": "Dashboard Handbook",
             "pages": [
-              "dashboard-handbook/overview"
+              "dashboard-handbook/overview",
+              "dashboard-handbook/add-gst-in",
+              "dashboard-handbook/payment-option-priority"
             ]
-          },
-          "untitled-page"
+          }
         ]
       },
       {
