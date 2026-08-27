@@ -78,13 +78,14 @@
       },
       {
         "tab": "Dashboard Handbook",
-        "groups": [
+        "pages": [
           {
             "group": "Dashboard Handbook",
             "pages": [
               "dashboard-handbook/overview"
             ]
-          }
+          },
+          "untitled-page"
         ]
       },
       {
