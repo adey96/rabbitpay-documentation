@@ -19,7 +19,8 @@
               "getting-started/quick-start",
               "getting-started/installation",
               "getting-started/shopify-integration",
-              "getting-started/one-click-checkout"
+              "getting-started/one-click-checkout",
+              "getting-started/add-gst-in"
             ]
           },
           {
@@ -48,11 +49,8 @@
               "integrations/convert-cod-to-prepaid",
               "integrations/payment-rules-by-cart-value",
               "integrations/disable-cod-for-products",
-              "integrations/abandoned-cart-recovery",
-              "integrations/shopify/one-click-checkout",
               {
                 "group": "abandoned-cart",
-                "icon": "shoppinng-cart",
                 "pages": [
                   "integrations/abandoned-cart-recovery",
                   "integrations/abandoned-cart-recovery/create-cart"
