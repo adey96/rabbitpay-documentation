@@ -52,6 +52,7 @@
               "integrations/shopify/one-click-checkout",
               {
                 "group": "abandoned-cart",
+                "icon": "shoppinng-cart",
                 "pages": [
                   "integrations/abandoned-cart-recovery",
                   "integrations/abandoned-cart-recovery/create-cart"
