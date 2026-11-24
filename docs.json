@@ -54,7 +54,8 @@
                   "integrations/abandoned-cart-recovery",
                   "integrations/abandoned-cart-recovery/create-cart"
                 ]
-              }
+              },
+              "integrations/google-ads-ga4-integration"
             ]
           },
           {
